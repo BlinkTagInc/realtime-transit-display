@@ -60,8 +60,7 @@ function getWeather(){
     if (err) {
       console.log(err);
     } else {
-      $('#weather').html('');
-      $('#weather').append(
+      $('.weather').html(
         '<div class="temp">' + context.weather.temperature.replace("F", "&deg;") + '</div>' +
         '<strong>' + context.weather.conditions + '</strong>' +
         '<br>Precipitation: <strong>' + context.weather.forecast.today.precipitation + '</strong>' +
@@ -70,8 +69,6 @@ function getWeather(){
       );
     }
   });
-  
-  setInterval(getWeather,1200000);
 }
 
 
@@ -158,8 +155,6 @@ function getBART(){
     
     return departure
   }
-  
-  setInterval(getBART,15000);
 }
 
 function getMUNI(routes){
@@ -282,8 +277,85 @@ function launchMap(){
   }
 }
 
+function getTweets(usernames){
+  
+  //Add parseURL to get links out of tweets
+  String.prototype.parseURL = function() {
+    return this.replace(/[A-Za-z]+:\/\/[A-Za-z0-9-_]+\.[A-Za-z0-9-_:%&~\?\/.=]+/g, function(url) {
+      return url.link(url);
+    });
+  };
+  
+  // Declare variables to hold twitter API url and user name
+  var twitter_api_url = 'http://search.twitter.com/search.json';
+  
+  var since_id = 0;
+  
+  function processTweet(tweet){
+    // Calculate how many hours ago was the tweet posted
+    var date_diff  = new Date() - new Date(tweet.created_at);
+    var hours      = Math.round(date_diff/(1000*60*60));
+
+    // Build the html string for the current tweet
+    var tweet_html = '<div class="tweet">';
+    tweet_html    += '<img src="' + tweet.profile_image_url + '" class="tweetImage">';
+    tweet_html    += '<div class="tweetStatus">';
+    tweet_html    += '<a href="http://www.twitter.com/';
+    tweet_html    += tweet.from_user + '/status/' + tweet.id + '" class="tweetUser"">';
+    tweet_html    += tweet.from_user + ':</a> ';
+    tweet_html    += tweet.text.parseURL() + '</div>';
+    tweet_html    += '<div class="tweetHours">' + hours;
+    tweet_html    += ' hours ago<\/div>';
+    
+    //Update 'since_id' if larger
+    since_id = (tweet.id > since_id) ? tweet.id : since_id;
+
+    // Append html string to tweet_container div
+    $('#tweetContainer').append(tweet_html);
+  }
+  
+  
+  function updateTweets(usernames){
+    //Build URL using 'since_id' to find only new tweets
+    var query_url = twitter_api_url + '?callback=?&rpp=25&since_id=' + since_id + '&q=';
+    for(var i in usernames){
+      query_url += 'from:' + usernames[i];
+      if(i < (usernames.length-1)){
+        query_url += '+OR+';
+      }
+    }
+
+    $.getJSON( query_url,
+      function(data) {
+        $.each(data.results, function(i, tweet) {
+          if(tweet.text !== undefined) {
+            processTweet(tweet);
+          }
+        });
+      }
+    );
+  }
+  
+  //Get updates every two minutes
+  setInterval(updateTweets(usernames),12000);
+}
+
+function doRotation(){
+  if($('#transitContainer').is(":visible")){
+    $('#transitContainer').fadeOut('slow');
+    $('#tweetContainer').fadeIn('slow');
+  } else {
+    $('#transitContainer').fadeIn('slow');
+    $('#tweetContainer').fadeOut('slow');
+  }
+}
+
 
 google.setOnLoadCallback(function(){
+  
+  
+  //Start Rotation
+  setInterval(doRotation,15000);
   
   //Define Muni Roures
   var MUNIroutes = [
@@ -338,13 +410,32 @@ google.setOnLoadCallback(function(){
   ];
 
   //Do transit directions
-  getBART();
+  //Get BART
+  setInterval(getBART(),15000);
   
-  getMUNI(MUNIroutes);
+  //Get MUNI
   setInterval(getMUNI(MUNIroutes), 15000);
   
-  getWeather();
+  setInterval(getWeather(),1200000);
 
   //Launch Google Maps
   launchMap();
+  
+  //get Tweets
+  var usernames = [
+    'brendannee',
+    'lstonehill',
+    '_nw_',
+    'lweite',
+    'jedhorne',
+    'woeismatt',
+    'halfhenry',
+    'stevebice',
+    'w01fe',
+    'qago',
+    'blinktaginc',
+    'pwndepot'
+  ];
+  getTweets(usernames);
+  
 });

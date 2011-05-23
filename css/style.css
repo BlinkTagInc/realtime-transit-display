@@ -4,11 +4,14 @@ body{
   margin:0;
 }
 
-#container{
+.container{
   width:1024px;
   height:768px;
   border:1px solid #ccc;
   margin: 0 auto;
+  position:absolute;
+  top:0;
+  overflow:hidden;
 }
 
 #pageTitle{
@@ -28,7 +31,7 @@ body{
   margin:0px;
   width:500px;
   float:left;
-  padding:10px 20px;
+  padding:10px 20px 0;
 }
 
 #map_canvas{
@@ -125,14 +128,73 @@ body{
   margin:5px 0;
 }
 
-#weather{
+.weather{
   float:right;
   width:230px;
   padding:5px 5px 10px;
 }
 
-#weather .temp{
+.weather .temp{
   font-size:42px;
   float:left;
   width:80px;
 }
+
+#tweetContainer {
+  display:none;
+}
+
+#tweetContainer a {
+  text-decoration:none;
+  color:#0C5F7D;
+}
+
+#tweetContainer .promo{
+  width:300px;
+  float:left;
+  clear:left;
+  margin:0 20px;
+}
+
+#tweetContainer .promo a{
+  text-decoration:none;
+  color:#DDD;
+}
+
+.tweet{
+  height:53px;
+  padding:6px;
+  border-bottom:solid 1px #DEDEDE;
+  background: #ffffff; /* Old browsers */
+  background: -moz-linear-gradient(top, #ffffff 0%, #e5e5e5 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#e5e5e5)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #ffffff 0%,#e5e5e5 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #ffffff 0%,#e5e5e5 100%); /* Opera11.10+ */
+  background: -ms-linear-gradient(top, #ffffff 0%,#e5e5e5 100%); /* IE10+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e5e5e5',GradientType=0 ); /* IE6-9 */
+  background: linear-gradient(top, #ffffff 0%,#e5e5e5 100%); /* W3C */
+}
+
+.tweetStatus {
+  display:inline-block;
+  width:944px;
+}
+
+.tweetUser{
+  font-weight:bold;
+}
+
+.tweetImage {
+  float:left;
+  margin-right:14px;
+  border:solid 2px #DEDEDE;
+  width:50px;
+  height:50px;
+}
+
+.tweetHours {
+  font-size:11px;
+  padding-top:4px;
+  color:#999;
+}
+
