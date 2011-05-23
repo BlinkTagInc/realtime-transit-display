@@ -9,10 +9,10 @@ function getWeather(){
       console.log(err);
     } else {
       $('#weather').html('');
-      $('#weather').append(context.weather.temperature + " " + context.weather.conditions);
-      $('#weather').append('<br>Precipitation: ' + context.weather.forecast.today.precipitation);
-      $('#weather').append('<br>Max: ' + context.weather.forecast.today.temperature.max);
-      $('#weather').append('<br>Min: ' + context.weather.forecast.today.temperature.min);
+      $('#weather').append('<div class="temp">' + context.weather.temperature.replace("F", "&deg;"));
+      $('#weather').append('<strong>' + context.weather.conditions + '</strong>');
+      $('#weather').append('<br>Precipitation: <strong>' + context.weather.forecast.today.precipitation + '</strong>');
+      $('#weather').append('<br>Range: <strong>' + context.weather.forecast.today.temperature.max.replace("F", "&deg;F") + ' - ' + context.weather.forecast.today.temperature.min.replace("F", "&deg;F") + '</strong>');
     }
   });
   
@@ -35,7 +35,6 @@ function getBART(){
     },
     dataType: 'xml',
     success:function(result){
-      console.log(result);
       $('#bart_north .departures').html('');
       $(result).find('etd').each(function(i, data){
         $('#bart_north .departures').append(addDirection(data));
@@ -54,7 +53,6 @@ function getBART(){
     },
     dataType: 'xml',
     success:function(result){
-      console.log(result);
       $('#bart_south .departures').html('');
       $(result).find('etd').each(function(i, data){
         $('#bart_south .departures').append(addDirection(data));
@@ -96,7 +94,7 @@ function getBART(){
     $(data).find('estimate').each(function(j, data){
       //Convert "Arrived" to "Arr"
       var minutes = ($(data).find('minutes').text() == 'Arrived') ? "0" : $(data).find('minutes').text();
-      departure += '<div class="time">' + minutes + '</div>';
+      departure += '<span class="time">' + minutes + '</span>';
     });
     departure += '</div>';
     
@@ -120,10 +118,12 @@ function getMUNI(route, stop){
     },
     dataType: 'xml',
     success:function(result){
-      console.log(result);
-      $('#muni' + route + '_' + stop + ' .departures').html('');
+      $('#muni' + route + '_' + stop + ' .departure span').remove();
       $(result).find('prediction').each(function(i, data){
-        $('#muni' + route + '_' + stop + ' .departures').append('<div class="time">' + $(data).attr('minutes') + '</div>');
+        //Limit to 3 results
+        if(i<3){
+          $('#muni' + route + '_' + stop + ' .departure').append('<span class="time">' + $(data).attr('minutes') + '</span>');
+        }
       });
     }
   });

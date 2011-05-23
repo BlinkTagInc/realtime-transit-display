@@ -2,12 +2,14 @@ html { height: 100% }
 body{
   font-family: 'Lato', arial, serif;
   margin:0;
-  height: 100%;
+}
+
+#container{
+  width:1024px;
+  height:768px;
 }
 
 #pageTitle{
-  margin:0px;
-  padding:10px 20px;
   background: #7d7e7d; /* Old browsers */
   background: -moz-linear-gradient(top, #7d7e7d 0%, #0e0e0e 100%); /* FF3.6+ */
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#7d7e7d), color-stop(100%,#0e0e0e)); /* Chrome,Safari4+ */
@@ -17,6 +19,14 @@ body{
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', endColorstr='#0e0e0e',GradientType=0 ); /* IE6-9 */
   background: linear-gradient(top, #7d7e7d 0%,#0e0e0e 100%); /* W3C */
   color:#ddd;
+  overflow:hidden;
+}
+
+#pageTitle h1{
+  margin:0px;
+  width:500px;
+  float:left;
+  padding:10px 20px;
 }
 
 #map_canvas{
@@ -25,22 +35,7 @@ body{
   float:right;
 }
 
-.map_overlay{
-  background:rgba(256,256,256,0.8);
-  padding:10px;
-  -webkit-border-radius: 15px;
-  -moz-border-radius: 15px;
-  border-radius: 15px;
-}
-
-.colorbox{
-  width:12px;
-  height:12px;
-  display:inline-block;
-  margin-right:5px;
-}
-
-#bart{
+.transitBox{
   border:1px solid #666;
   padding:5px;
   width:280px;
@@ -50,12 +45,27 @@ body{
   border-radius: 15px;
 }
 
-#bart .departure .destination {
+.transitBox h3{
+  margin:0;
+}
+
+.colorbox{
+  width:24px;
+  height:24px;
+  display:inline-block;
+  margin-right:5px;
+  vertical-align:middle;
+  font-weight:bold;
+  font-size:20px;
+  overflow:hidden;
+}
+
+.departure .destination {
   display:inline-block;
   width:140px;
 }
 
-#bart .departure .time{
+.departure .time{
   display:inline-block;
   padding:0 3px;
   margin:0 2px;
@@ -65,10 +75,18 @@ body{
   text-align:center;
 }
 
-#bart .departure{
+.departure{
   margin:5px 0;
 }
 
-#bart h3{
-  margin:0;
+#weather{
+  float:right;
+  width:230px;
+  padding:5px 5px 10px;
+}
+
+#weather .temp{
+  font-size:42px;
+  float:left;
+  width:80px;
 }

@@ -7,59 +7,85 @@
   <link href='http://fonts.googleapis.com/css?family=Lato:regular,900,900italic' rel='stylesheet' type='text/css'>
 </head>
 <body>
+  <div id="container">
   
-  <h1 id="pageTitle">Real Time Transit Departures</h1>
-  <div id="map_canvas"></div>
-  
-  <div id="bart">
-    <div id="bart_north">
-      <h3>BART Downtown/East Bay</h3>
-      <div class="departures"></div>
-    </div>
-    <div id="bart_south">
-      <h3>BART South/Airport</h3>
-      <div class="departures"></div>
-    </div>
-  </div>  
+    <div id="pageTitle">
+      <h1>Real Time Transit Departures</h1>
+      <div id="weather"></div>
+    </div>  
     
-  <div id="muni">
-    <div id="muni49_5551" class="muni-line">
-      <h3>49 MUNI - North on Van Ness</h3>
-      <div class="departures"></div>
+    <div id="map_canvas"></div>
+  
+    <div id="bart" class="transitBox">
+      <div id="bart_north">
+        <h3>BART Downtown/East Bay</h3>
+        <div class="departures"></div>
+      </div>
+      <div id="bart_south">
+        <h3>BART South/Airport</h3>
+        <div class="departures"></div>
+      </div>
+    </div>  
+    
+    <div id="muni_north" class="muni transitBox">
+      <h3>MUNI Northbound</h3>
+      <div id="muni49_5551" class="muni-line">
+        <div class="departure">
+          <div class="colorbox">49</div>
+          <div class="destination">Van Ness</div>
+        </div>
+      </div>
+      <div id="muni14_5551" class="muni-line">
+        <div class="departure">
+          <div class="colorbox">14</div>
+          <div class="destination">Mission</div>
+        </div>
+      </div>
+      <div id="muni12_4668" class="muni-line">
+        <div class="departure">
+          <div class="colorbox">12</div>
+          <div class="destination">Folsom</div>
+        </div>
+      </div>
+      <div id="muni22_3291" class="muni-line">
+        <div class="departure">
+          <div class="colorbox">22</div>
+          <div class="destination">Church/Fillmore</div>
+        </div>
+      </div>
     </div>
-    <div id="muni49_5552" class="muni-line">
-      <h3>49 MUNI - South on Mission</h3>
-      <div class="departures"></div>
+    <div id="muni_south" class="muni transitBox">
+      <h3>MUNI Southbound</h3>
+      <div id="muni49_5552" class="muni-line">
+        <div class="departure">
+          <div class="colorbox">49</div>
+          <div class="destination">Mission</div>
+        </div>
+      </div>
+      <div id="muni14_5552" class="muni-line">
+        <div class="departure">
+          <div class="colorbox">14</div>
+          <div class="destination">Mission</div>
+        </div>
+      </div>
+      <div id="muni12_4669" class="muni-line">
+        <div class="departure">
+          <div class="colorbox">12</div>
+          <div class="destination">Folsom</div>
+        </div>
+      </div>
     </div>
-    <div id="muni14_5551" class="muni-line">
-      <h3>14 MUNI - North on Mission</h3>
-      <div class="departures"></div>
+    <div id="muni_east" class="muni transitBox">
+      <h3>MUNI Eastbound</h3>
+      <div id="muni22_3293" class="muni-line">
+        <div class="departure">
+          <div class="colorbox">12</div>
+          <div class="destination">16th St</div>
+        </div>
+      </div>
     </div>
-    <div id="muni14_5552" class="muni-line">
-      <h3>14 MUNI - South on Mission</h3>
-      <div class="departures"></div>
-    </div>
-    <div id="muni12_4668" class="muni-line">
-      <h3>12 MUNI - North on Folsom</h3>
-      <div class="departures"></div>
-    </div>
-    <div id="muni12_4669" class="muni-line">
-      <h3>12 MUNI - South on Folsom</h3>
-      <div class="departures"></div>
-    </div>
-    <div id="muni22_3291" class="muni-line">
-      <h3>22 MUNI - North on Church/Fillmore</h3>
-      <div class="departures"></div>
-    </div>
-    <div id="muni22_3293" class="muni-line">
-      <h3>12 MUNI - East on 16th</h3>
-      <div class="departures"></div>
-    </div>
+    
   </div>
-  <div id="weather"></div>
-  
-  
-  
   <script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAA7ryB86mtzsqx_XU57t8PNhTMTGztSySO4_rR2h0VlHQYebwNHBQfKBMwuobg9gRDpM6rxsFgfXCnug"></script>
 
   <script type="text/javascript">
