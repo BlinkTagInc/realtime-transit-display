@@ -54,7 +54,7 @@ function Label(opt_options) {
 
 function getWeather(){
   //Get weather from SimpleGeo
-  var client = new simplegeo.ContextClient('FCxs4Y5Au5YpndD2p5WFvtv5DvZhSv4G');
+  var client = new simplegeo.ContextClient('rGQ4c9V7VRbnRcBUEmYMPyUu38d8dGS9');
   
   client.getContext('37.778381','-122.389388', function(err, context) {
     if (err) {
