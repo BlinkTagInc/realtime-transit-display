@@ -1,5 +1,57 @@
 var map;
 
+function Label(opt_options) {
+  // Initialization
+  this.setValues(opt_options);
+
+  // Label specific
+  var span = this.span_ = document.createElement('span');
+  span.className += 'map_label';
+
+  var div = this.div_ = document.createElement('div');
+  div.appendChild(span);
+  div.style.cssText = 'position: absolute; display: none';
+  };
+  Label.prototype = new google.maps.OverlayView;
+
+  // Implement onAdd
+  Label.prototype.onAdd = function() {
+  var pane = this.getPanes().overlayLayer;
+  pane.appendChild(this.div_);
+
+  // Ensures the label is redrawn if the text or position is changed.
+  var me = this;
+  this.listeners_ = [
+  google.maps.event.addListener(this, 'position_changed',
+     function() { me.draw(); }),
+  google.maps.event.addListener(this, 'text_changed',
+     function() { me.draw(); })
+  ];
+  };
+
+  // Implement onRemove
+  Label.prototype.onRemove = function() {
+  this.div_.parentNode.removeChild(this.div_);
+
+  // Label is removed from the map, stop updating its position/text.
+  for (var i = 0, I = this.listeners_.length; i < I; ++i) {
+  google.maps.event.removeListener(this.listeners_[i]);
+  }
+  };
+
+  // Implement draw
+  Label.prototype.draw = function() {
+  var projection = this.getProjection();
+  var position = projection.fromLatLngToDivPixel(this.get('position'));
+
+  var div = this.div_;
+  div.style.left = position.x + 'px';
+  div.style.top = position.y + 'px';
+  div.style.display = 'block';
+
+  this.span_.innerHTML = this.get('text').toString();
+};
+
 function getWeather(){
   //Get weather from SimpleGeo
   var client = new simplegeo.ContextClient('FCxs4Y5Au5YpndD2p5WFvtv5DvZhSv4G');
@@ -133,8 +185,8 @@ function getMUNI(route, stop){
 function launchMap(){
   
   map = new google.maps.Map(document.getElementById("map_canvas"), {
-    zoom: 17,
-    center: new google.maps.LatLng(37.76590, -122.41768),
+    zoom: 16,
+    center: new google.maps.LatLng(37.76720, -122.41768),
     mapTypeId: google.maps.MapTypeId.ROADMAP,
     mapTypeControl: false,
     panControl: false,
@@ -143,6 +195,7 @@ function launchMap(){
   });
   
   /*
+  //Walking map styles -- needed if transit map stops working
   
   var styles=[{featureType:"road.arterial",elementType:"all",stylers:[{visibility:"simplified"}]},{featureType:"road",elementType:"all",stylers:[{visibility:"on"},{lightness:13}]},{featureType:"road",elementType:"all",stylers:[{visibility:"on"},{saturation:-14},{gamma:1.14},{lightness:29},{hue:"#ddff00"}]},{featureType:"administrative.country",elementType:"all",stylers:[{visibility:"off"}]},{featureType:"administrative.locality",elementType:"all",stylers:[{visibility:"off"}]},{featureType:"administrative.province",elementType:"all",stylers:[{visibility:"off"}]},{featureType:"landscape",elementType:"all",stylers:[{hue:"#ffc300"},{lightness:-24},{saturation:2}]},{featureType:"poi",elementType:"geometry",stylers:[{visibility:"on"},{lightness:-11},{saturation:20},{hue:"#a1ff00"}]},{featureType:"poi.medical",elementType:"all",stylers:[{visibility:"off"}]},{featureType:"poi.school",elementType:"all",stylers:[{visibility:"off"}]},{featureType:"road.highway",elementType:"labels",stylers:[{visibility:"off"}]},{featureType:"road.arterial",elementType:"geometry",stylers:[{saturation:-1},{lightness:64},{gamma:0.74}]},{featureType:"landscape.man_made",elementType:"all",stylers:[{hue:"#ffc300"},{lightness:26},{gamma:1.29}]},{featureType:"road.highway",elementType:"all",stylers:[{saturation:36},{lightness:-8},{gamma:0.96},{visibility:"off"}]},{featureType:"road.highway",elementType:"all",stylers:[{lightness:88},{gamma:3.78},{saturation:1},{visibility:"off"}]},
   
@@ -153,35 +206,56 @@ function launchMap(){
    map.mapTypes.set('walking', walkingMapType);
    map.setMapTypeId('walking');
    
-   */
+  */
    
-   //Add transit layer
-   var transitOptions = {
-     getTileUrl: function(coord, zoom) {
-       return "http://mt1.google.com/vt/lyrs=m@155076273,transit:comp|vm:&hl=en&opts=r&s=Galil&" +
-       "z=" + zoom + "&x=" + coord.x + "&y=" + coord.y;
-     },
-     tileSize: new google.maps.Size(256, 256),
-     isPng: true
-   };
-   
-   var transitMapType = new google.maps.ImageMapType(transitOptions);
-
-   
-   map.overlayMapTypes.insertAt(0, transitMapType);
-   
-   var marker = new google.maps.Marker({
-     position: new google.maps.LatLng(37.76640, -122.41688),
-     map: map,
-     icon: 'http://pwn.blinktag.com/images/thepwndepot.png',
-     shadow: 'http://pwn.blinktag.com/images/thepwndepot_shadow.png',
-     clickable: false
-   });
+  //Add transit layer
+  var transitOptions = {
+    getTileUrl: function(coord, zoom) {
+      return "http://mt1.google.com/vt/lyrs=m@155076273,transit:comp|vm:&hl=en&opts=r&s=Galil&" +
+      "z=" + zoom + "&x=" + coord.x + "&y=" + coord.y;
+    },
+    tileSize: new google.maps.Size(256, 256),
+    isPng: true
+  };
+  
+  var transitMapType = new google.maps.ImageMapType(transitOptions);
+  map.overlayMapTypes.insertAt(0, transitMapType);
+  
+  //Pwn Depot Marker
+  var marker = new google.maps.Marker({
+    position: new google.maps.LatLng(37.76616, -122.41688),
+    map: map,
+    icon: 'http://pwn.blinktag.com/images/thepwndepot.png',
+    shadow: 'http://pwn.blinktag.com/images/thepwndepot_shadow.png',
+    clickable: false
+  });
+  
+  // Add  Labels
+  var labels = [
+    {x:-122.41924,y:37.76720,labeltext:'14,49'},
+    {x:-122.42050,y:37.76620,labeltext:'14,49'},
+  ];
+  
+  function addLabel(labeloptions){
+    LatLng = new google.maps.LatLng(labeloptions.y, labeloptions.x);
+    
+    var label = new Label({
+      map: map,
+      text: labeloptions.labeltext,
+      position: LatLng
+    });
+  }
+  
+  
+  for(var i in labels){
+    addLabel(labels[i]);
+  }
 }
 
 
 google.setOnLoadCallback(function(){
   
+  //Define Muni Roures
   var MUNIroutes = [
   {
     route: 12,
@@ -225,10 +299,10 @@ google.setOnLoadCallback(function(){
   },
   ];
 
+  //Do transit directions
   getBART();
   
   for(var i in MUNIroutes){
-    
     getMUNI(MUNIroutes[i].route, MUNIroutes[i].stop);
     setInterval(getMUNI(MUNIroutes[i].route, MUNIroutes[i].stop), 15000);
   }
