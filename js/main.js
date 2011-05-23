@@ -147,9 +147,12 @@ function getBART(){
     departure += '<div class="colorbox" style="background:' + color + '"></div>';
     departure += '<div class="destination">' + destination + '</div>';
     $(data).find('estimate').each(function(j, data){
-      //Convert "Arrived" to "Arr"
-      var minutes = ($(data).find('minutes').text() == 'Arrived') ? "0" : $(data).find('minutes').text();
-      departure += '<span class="time">' + minutes + '</span>';
+      //Only add times where minutes are less than 100
+      if($(data).find('minutes').text() < 100){
+        //Convert "Arrived" to "Arr"
+        var minutes = ($(data).find('minutes').text() == 'Arrived') ? "0" : $(data).find('minutes').text();
+        departure += '<span class="time">' + minutes + '</span>';
+      }
     });
     departure += '</div>';
     
@@ -182,8 +185,8 @@ function getMUNI(routes){
           div.show();
           
           $(result).find('prediction').each(function(i, data){
-            //Limit to 3 results
-            if(i<3){
+            //Limit to 3 results, only show times less than 100
+            if(i < 3 && $(data).attr('minutes') < 100){
               div.append('<span class="time">' + $(data).attr('minutes') + '</span>');
             }
           });
