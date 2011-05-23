@@ -63,8 +63,8 @@ body{
 
 .transitBox{
   border:1px solid #ccc;
-  padding:5px 5px 0;
-  width:340px;
+  padding:5px 15px 0;
+  width:330px;
   margin:5px;
   -webkit-border-radius: 15px;
   -moz-border-radius: 15px;
