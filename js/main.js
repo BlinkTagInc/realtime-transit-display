@@ -133,6 +133,9 @@ function getBART(){
       case 'SFO/Millbrae':
         var color = '#ffe800';
         break;
+      case 'SF Airport':
+        var color = '#ffe800';
+        break;
       case 'Millbrae':
         var color = '#ed1c24';
         break;
@@ -156,29 +159,47 @@ function getBART(){
   setInterval(getBART,15000);
 }
 
-function getMUNI(route, stop){
+function getMUNI(routes){
   var url = 'http://webservices.nextbus.com/service/publicXMLFeed';
-
-  //Request Departures
-  $.ajax({
-    url: url,
-    data: {
-      command: 'predictions',
-      a: 'sf-muni',
-      r: route,
-      s: stop
-    },
-    dataType: 'xml',
-    success:function(result){
-      $('#muni' + route + '_' + stop + ' .departure span').remove();
-      $(result).find('prediction').each(function(i, data){
-        //Limit to 3 results
-        if(i<3){
-          $('#muni' + route + '_' + stop + ' .departure').append('<span class="time">' + $(data).attr('minutes') + '</span>');
+  
+  function getRoute(route, stop){
+    //Request Departures
+    $.ajax({
+      url: url,
+      data: {
+        command: 'predictions',
+        a: 'sf-muni',
+        r: route,
+        s: stop
+      },
+      dataType: 'xml',
+      success:function(result){
+        var div = $('#muni' + route + '_' + stop + ' .departure');
+        
+        //Remove old times
+        $('#muni' + route + '_' + stop + ' .departure span').remove();
+        
+        //Check if route is still running
+        if($(result).find('prediction').length > 0){
+          div.show();
+          
+          $(result).find('prediction').each(function(i, data){
+            //Limit to 3 results
+            if(i<3){
+              div.append('<span class="time">' + $(data).attr('minutes') + '</span>');
+            }
+          });
+        } else {
+          div.hide();
         }
-      });
-    }
-  });
+      }
+    });
+  }
+
+  //Loop through all routes
+  for(var i in routes){
+    getRoute(routes[i].route, routes[i].stop);
+  }
 }
 
 
@@ -232,8 +253,14 @@ function launchMap(){
   
   // Add  Labels
   var labels = [
-    {x:-122.41924,y:37.76720,labeltext:'14,49'},
-    {x:-122.42050,y:37.76620,labeltext:'14,49'},
+    {x:-122.41924,y:37.76720,labeltext:'14, 49'},
+    {x:-122.42050,y:37.76620,labeltext:'14, 49'},
+    {x:-122.41608,y:37.76827,labeltext:'12'},
+    {x:-122.41490,y:37.76573,labeltext:'12'},
+    {x:-122.41606,y:37.76495,labeltext:'22, 33'},
+    {x:-122.41903,y:37.76540,labeltext:'22'},
+    {x:-122.42009,y:37.76454,labeltext:'33'},
+    
   ];
   
   function addLabel(labeloptions){
@@ -297,15 +324,21 @@ google.setOnLoadCallback(function(){
     route: 22,
     stop:3293
   },
+  {
+    route: 33,
+    stop:3292
+  },
+  {
+    route: 33,
+    stop:3299
+  }
   ];
 
   //Do transit directions
   getBART();
   
-  for(var i in MUNIroutes){
-    getMUNI(MUNIroutes[i].route, MUNIroutes[i].stop);
-    setInterval(getMUNI(MUNIroutes[i].route, MUNIroutes[i].stop), 15000);
-  }
+  getMUNI(MUNIroutes);
+  setInterval(getMUNI(MUNIroutes), 15000);
   
   getWeather();
 

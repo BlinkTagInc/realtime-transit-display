@@ -61,7 +61,7 @@ body{
 
 .transitBox{
   border:1px solid #ccc;
-  padding:5px;
+  padding:5px 5px 0;
   width:340px;
   margin:5px;
   -webkit-border-radius: 15px;
@@ -80,6 +80,7 @@ body{
 
 .transitBox h3{
   margin:0;
+  font-size:24px;
 }
 
 .colorbox{
