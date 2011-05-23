@@ -132,158 +132,6 @@ function getMUNI(route, stop){
 
 function launchMap(){
   
-  var styles = [
-  {
-      featureType: "road.arterial",
-      elementType: "all",
-      stylers: [
-        { visibility: "simplified" }
-      ]
-    },{
-      featureType: "road",
-      elementType: "all",
-      stylers: [
-        { visibility: "on" },
-        { lightness: 13 }
-      ]
-    },{
-      featureType: "road",
-      elementType: "all",
-      stylers: [
-        { visibility: "on" },
-        { saturation: -14 },
-        { gamma: 1.14 },
-        { lightness: 29 },
-        { hue: "#ddff00" }
-      ]
-    },{
-      featureType: "administrative.country",
-      elementType: "all",
-      stylers: [
-        { visibility: "off" }
-      ]
-    },{
-      featureType: "administrative.locality",
-      elementType: "all",
-      stylers: [
-        { visibility: "off" }
-      ]
-    },{
-      featureType: "administrative.province",
-      elementType: "all",
-      stylers: [
-        { visibility: "off" }
-      ]
-    },{
-      featureType: "landscape",
-      elementType: "all",
-      stylers: [
-        { hue: "#ffc300" },
-        { lightness: -24 },
-        { saturation: 2 }
-      ]
-    },{
-      featureType: "poi",
-      elementType: "geometry",
-      stylers: [
-        { visibility: "on" },
-        { lightness: -11 },
-        { saturation: 20 },
-        { hue: "#a1ff00" }
-      ]
-    },{
-      featureType: "poi.medical",
-      elementType: "all",
-      stylers: [
-        { visibility: "off" }
-      ]
-    },{
-      featureType: "poi.school",
-      elementType: "all",
-      stylers: [
-        { visibility: "off" }
-      ]
-    },{
-      featureType: "road.highway",
-      elementType: "labels",
-      stylers: [
-        { visibility: "off" }
-      ]
-    },{
-      featureType: "road.arterial",
-      elementType: "geometry",
-      stylers: [
-        { saturation: -1 },
-        { lightness: 64 },
-        { gamma: 0.74 }
-      ]
-    },{
-      featureType: "landscape.man_made",
-      elementType: "all",
-      stylers: [
-        { hue: "#ffc300" },
-        { lightness: 26 },
-        { gamma: 1.29 }
-      ]
-    },{
-      featureType: "road.highway",
-      elementType: "all",
-      stylers: [
-        { saturation: 36 },
-        { lightness: -8 },
-        { gamma: 0.96 },
-        { visibility: "off" }
-      ]
-    },{
-      featureType: "road.highway",
-      elementType: "all",
-      stylers: [
-        { lightness: 88 },
-        { gamma: 3.78 },
-        { saturation: 1 },
-        { visibility: "off" }
-      ]
-    },{
-      featureType: "road.local",
-      elementType: "labels",
-      stylers: [
-        { visibility: "on" },
-        { lightness: 27 },
-        { saturation: -3 }
-      ]
-    },{
-      featureType: "poi.business",
-      elementType: "all",
-      stylers: [
-        { hue: "#ff0900" }
-      ]
-    },{
-      featureType: "poi.government",
-      elementType: "all",
-      stylers: [
-        { hue: "#ff1a00" }
-      ]
-    },{
-      featureType: "poi.sports_complex",
-      elementType: "all",
-      stylers: [
-        { hue: "#ff1a00" }
-      ]
-    },{
-      featureType: "poi.place_of_worship",
-      elementType: "all",
-      stylers: [
-        { hue: "#ff3300" }
-      ]
-    },{
-      featureType: "all",
-      elementType: "all",
-      stylers: [
-
-      ]
-    }
-  ];
-  
   map = new google.maps.Map(document.getElementById("map_canvas"), {
     zoom: 17,
     center: new google.maps.LatLng(37.76590, -122.41768),
@@ -294,12 +142,18 @@ function launchMap(){
     streetViewControl: false
   });
   
-  /*var styledMapOptions = {
+  /*
+  
+  var styles=[{featureType:"road.arterial",elementType:"all",stylers:[{visibility:"simplified"}]},{featureType:"road",elementType:"all",stylers:[{visibility:"on"},{lightness:13}]},{featureType:"road",elementType:"all",stylers:[{visibility:"on"},{saturation:-14},{gamma:1.14},{lightness:29},{hue:"#ddff00"}]},{featureType:"administrative.country",elementType:"all",stylers:[{visibility:"off"}]},{featureType:"administrative.locality",elementType:"all",stylers:[{visibility:"off"}]},{featureType:"administrative.province",elementType:"all",stylers:[{visibility:"off"}]},{featureType:"landscape",elementType:"all",stylers:[{hue:"#ffc300"},{lightness:-24},{saturation:2}]},{featureType:"poi",elementType:"geometry",stylers:[{visibility:"on"},{lightness:-11},{saturation:20},{hue:"#a1ff00"}]},{featureType:"poi.medical",elementType:"all",stylers:[{visibility:"off"}]},{featureType:"poi.school",elementType:"all",stylers:[{visibility:"off"}]},{featureType:"road.highway",elementType:"labels",stylers:[{visibility:"off"}]},{featureType:"road.arterial",elementType:"geometry",stylers:[{saturation:-1},{lightness:64},{gamma:0.74}]},{featureType:"landscape.man_made",elementType:"all",stylers:[{hue:"#ffc300"},{lightness:26},{gamma:1.29}]},{featureType:"road.highway",elementType:"all",stylers:[{saturation:36},{lightness:-8},{gamma:0.96},{visibility:"off"}]},{featureType:"road.highway",elementType:"all",stylers:[{lightness:88},{gamma:3.78},{saturation:1},{visibility:"off"}]},
+  
+  var styledMapOptions = {
      name: "walking"
    }
    var walkingMapType = new google.maps.StyledMapType(styles, styledMapOptions);
    map.mapTypes.set('walking', walkingMapType);
-   map.setMapTypeId('walking');*/
+   map.setMapTypeId('walking');
+   
+   */
    
    //Add transit layer
    var transitOptions = {
