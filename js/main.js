@@ -75,6 +75,8 @@ function getWeather(){
 function getBART(){
   var bartAPIKey = 'MW9S-E7SL-26DU-VV8V';
   var url = 'http://api.bart.gov/api/etd.aspx';
+  
+  var bart = [];
 
   //Request Northbound Departures
   $.ajax({
@@ -82,39 +84,40 @@ function getBART(){
     data: {
       cmd: 'etd',
       orig: '16TH',
-      key: bartAPIKey,
-      dir: 'n'
+      key: bartAPIKey
     },
     dataType: 'xml',
     success:function(result){
-      $('#bart_north .departures').html('');
+      $('#bartNorth .departures').html('');
+      $('#bartSouth .departures').html('');
+      
       $(result).find('etd').each(function(i, data){
-        $('#bart_north .departures').append(addDirection(data));
+        //Process directions
+        departure = addDirection(data);
+        if(departure){
+          bart.push(departure);
+        }
       });
-    }
-  });
-  
-  //Request Southbound Departures
-  $.ajax({
-    url: url,
-    data: {
-      cmd: 'etd',
-      orig: '16TH',
-      key: bartAPIKey,
-      dir: 's'
-    },
-    dataType: 'xml',
-    success:function(result){
-      $('#bart_south .departures').html('');
-      $(result).find('etd').each(function(i, data){
-        $('#bart_south .departures').append(addDirection(data));
+      
+      //Sort departures
+      bart.sort(bartSortHandler);
+      
+      $.each(bart, function(i, departure){
+        if(departure.direction == 'North'){
+          $('#bartNorth .departures').append(departure.div);
+        } else {
+          $('#bartSouth .departures').append(departure.div);
+        }
       });
     }
   });
   
   function addDirection(data){
-    var destination = $(data).find('destination').text();
-    switch(destination){
+    var departure = {};
+    
+    departure.destination = $(data).find('destination').text();
+    
+    switch(departure.destination){
       case 'Dublin/Pleasanton':
         var color = '#00aeef';
         break;
@@ -149,20 +152,37 @@ function getBART(){
         var color = '#a8a9a9';
     }
     
-    var departure = '<div class="departure">';
-    departure += '<div class="colorbox" style="background:' + color + '"></div>';
-    departure += '<div class="destination">' + destination + '</div>';
+    departure.div = '<div class="departure">';
+    departure.div += '<div class="colorbox" style="background:' + color + '"></div>';
+    departure.div += '<div class="destination">' + departure.destination + '</div>';
+    
+    departure.times = [];
+    
     $(data).find('estimate').each(function(j, data){
       //Only add times where minutes are less than 100
       if($(data).find('minutes').text() < 100){
         //Convert "Arrived" to "Arr"
         var minutes = ($(data).find('minutes').text() == 'Arrived') ? "0" : $(data).find('minutes').text();
-        departure += '<span class="time">' + minutes + '</span>';
+        
+        departure.times.push(minutes);
+        
+        departure.direction = $(data).find('direction').text();
+        
+        departure.div += '<span class="time">' + minutes + '</span>';
       }
     });
-    departure += '</div>';
+    departure.div += '</div>';
     
-    return departure
+    //Check if first time is less than 40 minutes away. If not, discard entire destination
+    if(departure.times[0] < 40){
+      return departure;
+    } else {
+      return false;
+    }
+  }
+    
+  function bartSortHandler(a, b){
+    return (a.times[0] - b.times[0]);
   }
 }
 
