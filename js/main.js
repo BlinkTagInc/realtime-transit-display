@@ -253,10 +253,10 @@ function getMUNI(){
       },
       dataType: 'xml',
       success:function(result){
-        var div = $('#muni' + route + '_' + stop + ' .departure');
+        var div = $('#muni' + route + '_' + stop);
         
         //Remove old times
-        $('#muni' + route + '_' + stop + ' .departure span').remove();
+        $('#muni' + route + '_' + stop + ' span').remove();
         
         //Check if route is still running
         if($(result).find('prediction').length > 0){
@@ -432,6 +432,21 @@ function doRotation(){
   }
 }
 
+function resizeWindow() {
+  var newWindowHeight = $(window).height();
+  $(".container").css("height", newWindowHeight);
+}
+
+$('#hideProfile').click(function(){
+  $('#profile').slideToggle('fast');
+  $("#map_wrapper").css("height", $(window).height() );
+  $("#map_canvas").css("height", $(window).height() );
+  $('#showProfile').show();
+  $('#hideProfile').hide();
+  return false;
+});
+
+
 
 google.setOnLoadCallback(function(){
   
@@ -470,5 +485,8 @@ google.setOnLoadCallback(function(){
     'pwndepot'
   ];
   getTweets(usernames);
+  
+  resizeWindow();
+  $(window).bind("resize", resizeWindow);
   
 });
