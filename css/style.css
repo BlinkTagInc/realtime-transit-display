@@ -3,12 +3,6 @@ body{
   font-family: 'Lato', arial, serif;
   margin:0;
   overflow:hidden;
-}
-
-.container{
-  width:1024px;
-  margin: 0 auto;
-  overflow:hidden;
   background: #ffffff; /* Old browsers */
   background: -moz-linear-gradient(top, #ffffff 0%, #e5e5e5 100%); /* FF3.6+ */
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#e5e5e5)); /* Chrome,Safari4+ */
@@ -17,6 +11,12 @@ body{
   background: -ms-linear-gradient(top, #ffffff 0%,#e5e5e5 100%); /* IE10+ */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e5e5e5',GradientType=0 ); /* IE6-9 */
   background: linear-gradient(top, #ffffff 0%,#e5e5e5 100%); /* W3C */
+}
+
+.container{
+  width:1024px;
+  margin: 0 auto;
+  overflow:hidden;
 }
 
 #pageTitle{
