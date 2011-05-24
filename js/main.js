@@ -423,10 +423,10 @@ function getTweets(usernames){
 }
 
 function doRotation(){
-  if($('#transitContainer').is(":visible")){
-    $('#transitContainer').fadeOut('slow');
-    $('#tweetContainer').fadeIn('slow');
-  } else {
+  $('#transitContainer').fadeOut('slow');
+  $('#tweetContainer').fadeIn('slow');
+  setTimeout(fadeBack,7000);
+  function fadeBack(){
     $('#transitContainer').fadeIn('slow');
     $('#tweetContainer').fadeOut('slow');
   }
@@ -452,7 +452,7 @@ google.setOnLoadCallback(function(){
   
   
   //Start Rotation
-  setInterval(doRotation,15000);
+  setInterval(doRotation,20000);
 
   //Do transit directions
   //Get BART
