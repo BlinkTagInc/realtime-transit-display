@@ -262,10 +262,13 @@ function getMUNI(){
         if($(result).find('prediction').length > 0){
           div.show();
           
+          var count = 0;
+          
           $(result).find('prediction').each(function(i, data){
-            //Limit to 3 results, only show times less than 100
-            if(i < 3 && $(data).attr('minutes') < 100){
+            //Limit to 3 results, only show times less than 100, don't show results that are 0
+            if(count < 3 && $(data).attr('minutes') < 100 && $(data).attr('minutes') > 0){
               div.append('<span class="time">' + $(data).attr('minutes') + '</span>');
+              count++;
             }
           });
         } else {
