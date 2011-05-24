@@ -121,6 +121,12 @@ function getBART(){
       case 'Pittsburg/Bay Point':
         var color = '#ffe800';
         break;
+      case 'Concord':
+        var color = '#ffe800';
+        break;
+      case 'North Concord':
+        var color = '#ffe800';
+        break;
       case 'Richmond':
         var color = '#ed1c24';
         break;
@@ -160,7 +166,59 @@ function getBART(){
   }
 }
 
-function getMUNI(routes){
+function getMUNI(){
+  //Define Muni Roures
+  var MUNIroutes = [
+  {
+    route: 12,
+    stop:4668
+  },
+  {
+    route: 12,
+    stop:4669
+  },
+  {
+    route: 49,
+    stop:5551
+  },
+  {
+    route: 49,
+    stop:5552
+  },
+  {
+    route: 14,
+    stop:5551
+  },
+  {
+    route: 14,
+    stop:5552
+  },
+  {
+    route: '14L',
+    stop:5551
+  },
+  {
+    route: '14L',
+    stop:5552
+  },
+  {
+    route: 22,
+    stop:3291
+  },
+  {
+    route: 22,
+    stop:3293
+  },
+  {
+    route: 33,
+    stop:3292
+  },
+  {
+    route: 33,
+    stop:3299
+  }
+  ];
+  
   var url = 'http://webservices.nextbus.com/service/publicXMLFeed';
   
   function getRoute(route, stop){
@@ -198,8 +256,8 @@ function getMUNI(routes){
   }
 
   //Loop through all routes
-  for(var i in routes){
-    getRoute(routes[i].route, routes[i].stop);
+  for(var i in MUNIroutes){
+    getRoute(MUNIroutes[i].route, MUNIroutes[i].stop);
   }
 }
 
@@ -318,7 +376,7 @@ function getTweets(usernames){
   }
   
   
-  function updateTweets(usernames){
+  function updateTweets(){
     //Build URL using 'since_id' to find only new tweets
     var query_url = twitter_api_url + '?callback=?&rpp=25&since_id=' + since_id + '&q=';
     for(var i in usernames){
@@ -340,7 +398,8 @@ function getTweets(usernames){
   }
   
   //Get updates every two minutes
-  setInterval(updateTweets(usernames),12000);
+  updateTweets();
+  setInterval(updateTweets,12000);
 }
 
 function doRotation(){
@@ -359,67 +418,18 @@ google.setOnLoadCallback(function(){
   
   //Start Rotation
   setInterval(doRotation,15000);
-  
-  //Define Muni Roures
-  var MUNIroutes = [
-  {
-    route: 12,
-    stop:4668
-  },
-  {
-    route: 12,
-    stop:4669
-  },
-  {
-    route: 49,
-    stop:5551
-  },
-  {
-    route: 49,
-    stop:5552
-  },
-  {
-    route: 14,
-    stop:5551
-  },
-  {
-    route: 14,
-    stop:5552
-  },
-  {
-    route: '14L',
-    stop:5551
-  },
-  {
-    route: '14L',
-    stop:5552
-  },
-  {
-    route: 22,
-    stop:3291
-  },
-  {
-    route: 22,
-    stop:3293
-  },
-  {
-    route: 33,
-    stop:3292
-  },
-  {
-    route: 33,
-    stop:3299
-  }
-  ];
 
   //Do transit directions
   //Get BART
-  setInterval(getBART(),15000);
+  getBART();
+  setInterval(getBART,15000);
   
   //Get MUNI
-  setInterval(getMUNI(MUNIroutes), 15000);
+  getMUNI()
+  setInterval(getMUNI, 15000);
   
-  setInterval(getWeather(),1200000);
+  getWeather();
+  setInterval(getWeather,1200000);
 
   //Launch Google Maps
   launchMap();
