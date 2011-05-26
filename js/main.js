@@ -1,4 +1,5 @@
 var map;
+var bartAPIKey = 'MW9S-E7SL-26DU-VV8V';
 
 function Label(opt_options) {
   // Initialization
@@ -73,7 +74,6 @@ function getWeather(){
 
 
 function getBART(){
-  var bartAPIKey = 'MW9S-E7SL-26DU-VV8V';
   var url = 'http://api.bart.gov/api/etd.aspx';
   
   var bart = [];
@@ -184,6 +184,30 @@ function getBART(){
   function bartSortHandler(a, b){
     return (a.times[0] - b.times[0]);
   }
+}
+
+function getAdvisories(){
+  var url = 'http://api.bart.gov/api/etd.aspx';
+
+  var bart = [];
+
+  //Request Northbound Departures
+  $.ajax({
+    url: url,
+    data: {
+      cmd: 'bsa',
+      orig: '16TH',
+      key: bartAPIKey
+    },
+    dataType: 'xml',
+    success:function(result){
+      $('#advisories').html('');
+      $(result).find('bsa').each(function(i, data){
+        //Process alert
+        $('#advisories').append('<div>Alert: ' + data.description + '<br>' + data.posted + '</div>');
+      });
+    }
+  });
 }
 
 function getMUNI(){
@@ -453,6 +477,9 @@ $('#hideProfile').click(function(){
 
 google.setOnLoadCallback(function(){
   
+  //Resize Window
+  resizeWindow();
+  $(window).bind("resize", resizeWindow);
   
   //Start Rotation
   setInterval(doRotation,20000);
@@ -466,13 +493,14 @@ google.setOnLoadCallback(function(){
   getMUNI()
   setInterval(getMUNI, 15000);
   
+  //Get weather from SimpleGeo
   getWeather();
   setInterval(getWeather,1200000);
 
   //Launch Google Maps
   launchMap();
   
-  //get Tweets
+  //Get Tweets
   var usernames = [
     'brendannee',
     'lstonehill',
@@ -489,7 +517,8 @@ google.setOnLoadCallback(function(){
   ];
   getTweets(usernames);
   
-  resizeWindow();
-  $(window).bind("resize", resizeWindow);
+  //Get BART service advisories
+  getAdvisories();
+  setInterval(getAdvisories,1200000);
   
 });
