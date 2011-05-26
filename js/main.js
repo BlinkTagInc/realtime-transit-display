@@ -162,13 +162,18 @@ function getBART(){
       //Only add times where minutes are less than 100
       if($(data).find('minutes').text() < 100){
         //Convert "Arrived" to "Arr"
-        var minutes = ($(data).find('minutes').text() == 'Arrived') ? "0" : $(data).find('minutes').text();
+        var minutes = ($(data).find('minutes').text() == 'Arrived') ? 0 : $(data).find('minutes').text();
         
         departure.times.push(minutes);
         
         departure.direction = $(data).find('direction').text();
         
-        departure.div += '<span class="time">' + minutes + '</span>';
+        //Add "min" to first departure
+        if(j == 0){
+          departure.div += '<span class="time first">' + minutes + ' min</span>';
+        } else {
+          departure.div += '<span class="time">' + minutes + '</span>';
+        }
       }
     });
     departure.div += '</div>';
@@ -291,7 +296,14 @@ function getMUNI(){
           $(result).find('prediction').each(function(i, data){
             //Limit to 3 results, only show times less than 100, don't show results that are 0
             if(count < 3 && $(data).attr('minutes') < 100 && $(data).attr('minutes') > 0){
-              div.append('<span class="time">' + $(data).attr('minutes') + '</span>');
+              
+              //Add "min" to first time
+              if(count == 0){
+                div.append('<span class="time first">' + $(data).attr('minutes') + ' min</span>');
+              } else {
+                div.append('<span class="time">' + $(data).attr('minutes') + '</span>');
+              }
+              
               count++;
             }
           });

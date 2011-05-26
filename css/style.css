@@ -70,8 +70,8 @@ body{
 }
 
 .transitBox{
-  padding:5px 15px 0;
-  width:340px;
+  padding:5px 0 0;
+  width:385px;
   margin:5px;
   font-size:18px;
 }
@@ -95,6 +95,10 @@ body{
   vertical-align:middle;
 }
 
+.departure{
+  margin-bottom:5px;
+}
+
 .departure .destination {
   display:inline-block;
   width:180px;
@@ -110,7 +114,7 @@ body{
   height:28px;
   text-align:center;
   font-size:22px;
-  color:#0037c3;
+  color:#637ec3;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
@@ -124,18 +128,21 @@ body{
   background: linear-gradient(top, #ffffff 0%,#e5e5e5 100%); /* W3C */
 }
 
-.departure{
-  margin:5px 0;
+.departure .first{
+  width:70px;
+  color:#0037c3;
 }
 
 .weather{
   float:right;
   width:230px;
   padding:5px 5px 10px;
+  font-size:11px;
 }
 
 .weather .temp{
   font-size:42px;
+  line-height:42px;
   float:left;
   width:80px;
 }
