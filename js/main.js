@@ -402,8 +402,12 @@ function getTweets(usernames){
   function processTweet(tweet){
     // Calculate how many hours ago was the tweet posted
     var date_diff  = new Date() - new Date(tweet.created_at);
-    var hours      = Math.round(date_diff/(1000*60*60));
-
+    if(date_diff/(1000*60*60) < 1){
+      var time = Math.round(date_diff/(1000*60)) + " minutes";
+    } else {
+      var time = Math.round(date_diff/(1000*60*60)) + " hours";
+    }
+    
     // Build the html string for the current tweet
     var tweet_html = '<div class="tweet">';
     tweet_html    += '<img src="' + tweet.profile_image_url + '" class="tweetImage">';
@@ -412,8 +416,7 @@ function getTweets(usernames){
     tweet_html    += tweet.from_user + '/status/' + tweet.id + '" class="tweetUser"">';
     tweet_html    += tweet.from_user + ':</a> ';
     tweet_html    += tweet.text.parseURL() + '</div>';
-    tweet_html    += '<div class="tweetHours">' + hours;
-    tweet_html    += ' hours ago<\/div>';
+    tweet_html    += '<div class="tweetHours">' + time + ' ago</div>';
     
     //Update 'since_id' if larger
     since_id = (tweet.id > since_id) ? tweet.id : since_id;
@@ -436,7 +439,7 @@ function getTweets(usernames){
     $.getJSON( query_url,
       function(data) {
         $.each(data.results, function(i, tweet) {
-          if(tweet.text !== undefined) {
+          if(tweet.text !== undefined && tweet.id != since_id) {
             processTweet(tweet);
           }
         });
