@@ -137,14 +137,21 @@ body{
   color:#0037c3;
 }
 
-.weather{
+#clock{
+  float:right;
+  width:190px;
+  padding:10px;
+  font-size:30px;
+}
+
+#weather{
   float:right;
   width:230px;
   padding:5px 5px 10px;
   font-size:11px;
 }
 
-.weather .temp{
+#weather .temp{
   font-size:42px;
   line-height:42px;
   float:left;

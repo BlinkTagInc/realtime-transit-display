@@ -61,7 +61,7 @@ function getWeather(){
     if (err) {
       console.log(err);
     } else {
-      $('.weather').html(
+      $('#weather').html(
         '<div class="temp">' + context.weather.temperature.replace("F", "&deg;") + '</div>' +
         '<strong>' + context.weather.conditions + '</strong>' +
         '<br>Precipitation: <strong>' + context.weather.forecast.today.precipitation + '</strong>' +
@@ -444,11 +444,11 @@ function getTweets(usernames){
     //Build URL using 'since_id' to find only new tweets
     var query_url = twitter_api_url + '?callback=?&rpp=25&since_id=' + since_id + '&q=';
     for(var i in usernames){
-      query_url += 'from:' + usernames[i];
-      if(i < (usernames.length-1)){
-        query_url += '+OR+';
-      }
+      //Add each username to query
+      query_url += 'from:' + usernames[i] + '+OR+';
     }
+    //Add statement to find tweets referenceing @pwndepot
+    query_url += '@pwndepot';
 
     $.getJSON( query_url,
       function(data) {
@@ -477,8 +477,36 @@ function rotateTweets(){
        $('#tweetContainer .tweet:first').slideDown('fast');
     }
   });
-  
 }
+
+function updateClock()
+{
+  var currentTime = new Date();
+
+  var currentHours = currentTime.getHours();
+  var currentMinutes = currentTime.getMinutes();
+  var currentSeconds = currentTime.getSeconds();
+
+  // Pad the minutes and seconds with leading zeros, if required
+  currentMinutes = ( currentMinutes < 10 ? "0" : "" ) + currentMinutes;
+  currentSeconds = ( currentSeconds < 10 ? "0" : "" ) + currentSeconds;
+
+  // Choose either "AM" or "PM" as appropriate
+  var timeOfDay = ( currentHours < 12 ) ? "AM" : "PM";
+
+  // Convert the hours component to 12-hour format if needed
+  currentHours = ( currentHours > 12 ) ? currentHours - 12 : currentHours;
+
+  // Convert an hours component of "0" to "12"
+  currentHours = ( currentHours == 0 ) ? 12 : currentHours;
+
+  // Compose the string for display
+  var currentTimeString = currentHours + ":" + currentMinutes + ":" + currentSeconds + " " + timeOfDay;
+
+  // Update the time display
+  $('#clock').html(currentTimeString);
+}
+
 
 function resizeWindow() {
   var newWindowHeight = $(window).height();
@@ -494,6 +522,9 @@ google.setOnLoadCallback(function(){
   
   // Rotate Tweets
   setInterval(rotateTweets,10000);
+
+  //Update Clock
+  setInterval(updateClock, 1000);
 
   //Do transit directions
   //Get BART
