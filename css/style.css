@@ -74,6 +74,7 @@ body{
   width:385px;
   margin:5px;
   font-size:18px;
+  display:inline-block;
 }
 
 .transitBox h3{
@@ -82,31 +83,33 @@ body{
 }
 
 .colorbox{
-  width:24px;
+  width:40px;
   height:24px;
-  display:inline-block;
-  margin-right:5px;
+  float:left;
   font-weight:bold;
   font-size:20px;
   overflow:hidden;
 }
 
 #bart .colorbox{
+  width:24px;
+  margin-right:16px;
   vertical-align:middle;
-  margin-right:10px;
 }
 
 .departure{
   margin-bottom:5px;
+  clear:left;
+  overflow:hidden;
 }
 
 .departure .destination {
-  display:inline-block;
-  width:180px;
+  float:left;
+  width:170px;
 }
 
 .departure .time{
-  display:inline-block;
+  float:left;
   padding:0 3px;
   margin:0 2px;
   border:1px solid #0037c3;
