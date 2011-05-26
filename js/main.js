@@ -325,7 +325,7 @@ function launchMap(){
   
   map = new google.maps.Map(document.getElementById("map_canvas"), {
     zoom: 16,
-    center: new google.maps.LatLng(37.76720, -122.41768),
+    center: new google.maps.LatLng(37.76670, -122.41768),
     mapTypeId: google.maps.MapTypeId.ROADMAP,
     mapTypeControl: false,
     panControl: false,
@@ -423,12 +423,14 @@ function getTweets(usernames){
     // Build the html string for the current tweet
     var tweet_html = '<div class="tweet">';
     tweet_html    += '<img src="' + tweet.profile_image_url + '" class="tweetImage">';
-    tweet_html    += '<div class="tweetStatus">';
+    tweet_html    += '<div class="tweetInfo">';
     tweet_html    += '<a href="http://www.twitter.com/';
     tweet_html    += tweet.from_user + '/status/' + tweet.id + '" class="tweetUser"">';
-    tweet_html    += tweet.from_user + ':</a> ';
-    tweet_html    += tweet.text.parseURL() + '</div>';
+    tweet_html    += tweet.from_user + '</a> ';
     tweet_html    += '<div class="tweetHours">' + time + ' ago</div>';
+    tweet_html    += '</div>';
+    tweet_html    += '<div class="tweetStatus">';
+    tweet_html    += tweet.text.parseURL() + '</div>';
     
     //Update 'since_id' if larger
     since_id = (tweet.id > since_id) ? tweet.id : since_id;
@@ -464,30 +466,24 @@ function getTweets(usernames){
   setInterval(updateTweets,12000);
 }
 
-function doRotation(){
-  $('#transitContainer').fadeOut('slow');
-  $('#tweetContainer').fadeIn('slow');
-  setTimeout(fadeBack,7000);
-  function fadeBack(){
-    $('#transitContainer').fadeIn('slow');
-    $('#tweetContainer').fadeOut('slow');
-  }
+
+function rotateTweets(){
+  var visibleTweet = $('#tweetContainer .tweet:visible');
+  var nextTweet = $('#tweetContainer .tweet:visible').next();
+  visibleTweet.slideUp('fast',function(){
+    if(nextTweet.length != 0){
+      nextTweet.slideDown('fast');
+    } else {
+       $('#tweetContainer .tweet:first').slideDown('fast');
+    }
+  });
+  
 }
 
 function resizeWindow() {
   var newWindowHeight = $(window).height();
   $(".container").css("height", newWindowHeight);
 }
-
-$('#hideProfile').click(function(){
-  $('#profile').slideToggle('fast');
-  $("#map_wrapper").css("height", $(window).height() );
-  $("#map_canvas").css("height", $(window).height() );
-  $('#showProfile').show();
-  $('#hideProfile').hide();
-  return false;
-});
-
 
 
 google.setOnLoadCallback(function(){
@@ -496,8 +492,8 @@ google.setOnLoadCallback(function(){
   resizeWindow();
   $(window).bind("resize", resizeWindow);
   
-  //Start Rotation
-  setInterval(doRotation,20000);
+  // Rotate Tweets
+  setInterval(rotateTweets,10000);
 
   //Do transit directions
   //Get BART

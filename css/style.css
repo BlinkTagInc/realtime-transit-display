@@ -41,7 +41,7 @@ body{
 
 #map_canvas{
   width:600px;
-  height:390px;
+  height:350px;
   float:right;
   border:1px solid #ccc;
 }
@@ -148,29 +148,10 @@ body{
 }
 
 #tweetContainer {
-  display:none;
-}
-
-#tweetContainer a {
-  text-decoration:none;
-  color:#0C5F7D;
-}
-
-#tweetContainer .promo{
-  width:300px;
-  float:left;
-  clear:left;
-  margin:0 20px;
-}
-
-#tweetContainer .promo a{
-  text-decoration:none;
-  color:#DDD;
-}
-
-.tweet{
-  height:53px;
-  padding:6px;
+  position: absolute;
+  bottom:0;
+  height:65px;
+  width:100%;
   border-bottom:solid 1px #DEDEDE;
   background: #ffffff; /* Old browsers */
   background: -moz-linear-gradient(top, #ffffff 0%, #e5e5e5 100%); /* FF3.6+ */
@@ -182,25 +163,51 @@ body{
   background: linear-gradient(top, #ffffff 0%,#e5e5e5 100%); /* W3C */
 }
 
-.tweetStatus {
-  width:944px;
+#tweetContainer a {
+  text-decoration:none;
+  color:#0C5F7D;
+}
+
+.tweet{
+  height:65px;
+  width:1024px;
+  padding:6px;
+  margin:0 auto;
+  display:none;
+}
+
+#tweetContainer .tweet:first-child{
+  display:block;
 }
 
 .tweetUser{
   font-weight:bold;
+  font-size:20px;
 }
 
 .tweetImage {
   float:left;
-  margin-right:14px;
+  margin-right:7px;
   border:solid 2px #DEDEDE;
   width:50px;
   height:50px;
+}
+
+.tweetInfo {
+  float:left;
+  margin-right:14px;
+  width:100px;
 }
 
 .tweetHours {
   font-size:11px;
   padding-top:4px;
   color:#999;
+}
+
+.tweetStatus {
+  float:left;
+  width:840px;
+  font-size:20px;
 }
 
