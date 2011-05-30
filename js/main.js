@@ -511,6 +511,25 @@ function updateClock()
 function resizeWindow() {
   var newWindowHeight = $(window).height();
   $(".container").css("height", newWindowHeight);
+  //Scale departures
+  resizeDepartures();
+}
+
+function resizeDepartures(){
+  var visibleHeight = $(window).height() - $('#pageTitle').height() - $('#tweetContainer').height();
+  //Set #transitBox font-size to 100%;
+  $('#transitBoxContainer').css('font-size','100%');
+  var currentHeight = $('#transitBoxContainer').height();
+  
+  if(currentHeight > visibleHeight){
+    console.log(currentHeight);
+    console.log(visibleHeight);
+    
+    //Calculate percent to scale
+    var percent = Math.ceil((1 - ((currentHeight - visibleHeight) / currentHeight)) * 100);
+    $('#transitBoxContainer').css('font-size', percent + '%');
+    console.log(percent + '%');
+  }
 }
 
 
@@ -562,5 +581,9 @@ google.setOnLoadCallback(function(){
   //Get BART service advisories
   getAdvisories();
   setInterval(getAdvisories,1200000);
+  
+  //Resize transit if needed
+  resizeDepartures();
+  setInterval(resizeDepartures,1000);
   
 });

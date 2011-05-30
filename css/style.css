@@ -72,9 +72,7 @@ body{
 .transitBox{
   padding:0.3em 0 0;
   width:23em;
-  margin:5px;
-  font-size:1.1em;
-  display:inline-block;
+  margin:0.2em;
 }
 
 .transitBox h3{
@@ -88,7 +86,7 @@ body{
   line-height:1.7em;
   float:left;
   font-weight:bold;
-  font-size:20px;
+  font-size:1.4em;
   overflow:hidden;
 }
 
@@ -122,9 +120,9 @@ body{
   font-size:1.25em;
   line-height:1.4em;
   color:#637ec3;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
+  -webkit-border-radius: 0.3em;
+  -moz-border-radius: 0.3em;
+  border-radius: 0.3em;
   background: #ffffff; /* Old browsers */
   background: -moz-linear-gradient(top, #ffffff 0%, #e5e5e5 100%); /* FF3.6+ */
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#e5e5e5)); /* Chrome,Safari4+ */
