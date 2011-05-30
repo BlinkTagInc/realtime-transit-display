@@ -70,21 +70,22 @@ body{
 }
 
 .transitBox{
-  padding:5px 0 0;
-  width:385px;
+  padding:0.3em 0 0;
+  width:23em;
   margin:5px;
-  font-size:18px;
+  font-size:1.1em;
   display:inline-block;
 }
 
 .transitBox h3{
   margin:0;
-  font-size:20px;
+  font-size:1.2em;
 }
 
 .colorbox{
-  width:40px;
-  height:24px;
+  width:1.9em;
+  height:1.4em;
+  line-height:1.7em;
   float:left;
   font-weight:bold;
   font-size:20px;
@@ -92,8 +93,8 @@ body{
 }
 
 #bart .colorbox{
-  width:24px;
-  margin-right:16px;
+  width:1.4em;
+  margin-right:0.5em;
   vertical-align:middle;
 }
 
@@ -105,19 +106,21 @@ body{
 
 .departure .destination {
   float:left;
-  width:170px;
+  width:10em;
+  line-height:2em;
 }
 
 .departure .time{
   float:left;
-  padding:0 3px;
-  margin:0 2px;
+  padding:0.1em;
+  margin:0 0.1em;
   border:1px solid #0037c3;
   font-weight:bold;
-  width:28px;
-  height:28px;
+  width:1.4em;
+  height:1.4em;
   text-align:center;
-  font-size:22px;
+  font-size:1.25em;
+  line-height:1.4em;
   color:#637ec3;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
@@ -133,7 +136,7 @@ body{
 }
 
 .departure .first{
-  width:70px;
+  width:3.5em;
   color:#0037c3;
 }
 
