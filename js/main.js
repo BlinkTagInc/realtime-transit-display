@@ -574,7 +574,10 @@ google.setOnLoadCallback(function(){
     'w01fe',
     'qago',
     'blinktaginc',
-    'pwndepot'
+    'pwndepot',
+    'keussen',
+    'dduugg',
+    'juliebadoolie'
   ];
   getTweets(usernames);
   
