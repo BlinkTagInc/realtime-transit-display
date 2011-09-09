@@ -54,21 +54,22 @@ function Label(opt_options) {
 };
 
 function getWeather(){
-  //Get weather from SimpleGeo
-  var client = new simplegeo.ContextClient('rGQ4c9V7VRbnRcBUEmYMPyUu38d8dGS9');
   
-  client.getContext('37.778381','-122.389388', function(err, context) {
-    if (err) {
-      console.log(err);
-    } else {
-      $('#weather').html(
-        '<div class="temp">' + context.weather.temperature.replace("F", "&deg;") + '</div>' +
-        '<strong>' + context.weather.conditions + '</strong>' +
-        '<br>Precipitation: <strong>' + context.weather.forecast.today.precipitation + '</strong>' +
-        '<br>Range: <strong>' + context.weather.forecast.today.temperature.min.replace("F", "&deg;F") + 
-        ' - ' + context.weather.forecast.today.temperature.max.replace("F", "&deg;F") + '</strong>'
-      );
-    }
+  //Get weather from Wunderground via YQL
+  $.getJSON('https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D%22http%3A%2F%2Fapi.wunderground.com%2Fweatherstation%2FWXCurrentObXML.asp%3FID%3DKCASANFR58%22&format=json&callback=?',function(data){
+    //Current conditions
+    $('#weather .temp').html(Math.round(data.query.results.current_observation.temp_f) + '&deg;');
+  });
+  $.getJSON('https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D%22http%3A%2F%2Fapi.wunderground.com%2Fauto%2Fwui%2Fgeo%2FForecastXML%2Findex.xml%3Fquery%3D94103%22&format=json&callback=?',function(data){
+    //Forecast
+    var forecast = data.query.results.forecast.simpleforecast.forecastday[0];
+    $('#weather .forecast').html(
+      '<img src="http://icons-ak.wxug.com/i/c/a/' + forecast.icon + '.gif" class="weathericon">' +
+      '<strong>' + forecast.conditions + '</strong>' +
+      '<br>Range: <strong>' + forecast.low.fahrenheit + '&deg;F' + 
+      ' - ' + forecast.high.fahrenheit + '&deg;F' + '</strong>' +
+      '<br>Precip: <strong>' + forecast.pop + '%</strong>'
+    );
   });
 }
 
@@ -522,13 +523,9 @@ function resizeDepartures(){
   var currentHeight = $('#transitBoxContainer').height();
   
   if(currentHeight > visibleHeight){
-    console.log(currentHeight);
-    console.log(visibleHeight);
-    
     //Calculate percent to scale
     var percent = Math.ceil((1 - ((currentHeight - visibleHeight) / currentHeight)) * 100);
     $('#transitBoxContainer').css('font-size', percent + '%');
-    console.log(percent + '%');
   }
 }
 
