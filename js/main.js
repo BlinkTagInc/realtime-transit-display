@@ -156,6 +156,7 @@ function getBART(){
     departure.div = '<div class="departure">';
     departure.div += '<div class="colorbox" style="background:' + color + '"></div>';
     departure.div += '<div class="destination">' + departure.destination + '</div>';
+    departure.div += '<div class="times">';
     
     departure.times = [];
     
@@ -168,15 +169,11 @@ function getBART(){
         departure.times.push(minutes);
         
         departure.direction = $(data).find('direction').text();
-        
-        //Add "min" to first departure
-        if(j == 0){
-          departure.div += '<span class="time first">' + minutes + ' min</span>';
-        } else {
-          departure.div += '<span class="time">' + minutes + '</span>';
-        }
+
+        departure.div += '<span>' + minutes + ' min</span>';
       }
     });
+    departure.div += '</div>';
     departure.div += '</div>';
     
     //Check if first time is less than 40 minutes away. If not, discard entire destination
@@ -253,7 +250,7 @@ function getMUNI(){
   },
   {
     route: 22,
-    stop:3291
+    stop:7289
   },
   {
     route: 22,
@@ -261,11 +258,19 @@ function getMUNI(){
   },
   {
     route: 33,
-    stop:3292
+    stop:7289
   },
   {
     route: 33,
     stop:3299
+  },
+  {
+    route: 'N',
+    stop:6996
+  },
+  {
+    route: 'N OWL',
+    stop:5696
   }
   ];
   
@@ -283,10 +288,10 @@ function getMUNI(){
       },
       dataType: 'xml',
       success:function(result){
-        var div = $('#muni' + route + '_' + stop);
+        var div = $('#muni' + route.toString().replace(/\s/g, '') + '_' + stop);
         
-        //Remove old times
-        $('#muni' + route + '_' + stop + ' span').remove();
+        //Clear old times
+        $('.times', div).html('');
         
         //Check if route is still running
         if($(result).find('prediction').length > 0){
@@ -298,12 +303,7 @@ function getMUNI(){
             //Limit to 3 results, only show times less than 100, don't show results that are 0
             if(count < 3 && $(data).attr('minutes') < 100 && $(data).attr('minutes') > 0){
               
-              //Add "min" to first time
-              if(count == 0){
-                div.append('<span class="time first">' + $(data).attr('minutes') + ' min</span>');
-              } else {
-                div.append('<span class="time">' + $(data).attr('minutes') + '</span>');
-              }
+              $('.times', div).append('<span>' + $(data).attr('minutes') + ' min</span>');
               
               count++;
             }
@@ -377,8 +377,7 @@ function launchMap(){
     {x:-122.41608,y:37.76827,labeltext:'12'},
     {x:-122.41485,y:37.76573,labeltext:'12'},
     {x:-122.41606,y:37.76495,labeltext:'22, 33'},
-    {x:-122.41903,y:37.76540,labeltext:'22'},
-    {x:-122.42009,y:37.76454,labeltext:'33'},
+    {x:-122.41606,y:37.76565,labeltext:'22, 33'},
     
   ];
   
