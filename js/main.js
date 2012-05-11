@@ -573,8 +573,14 @@ google.setOnLoadCallback(function(){
     'pwndepot',
     'keussen',
     'dduugg',
-    'juliebadoolie'
-  ];
+    'juliebadoolie',
+    'mgougherty',
+    'jkeussen',
+    'carolinetien',
+    'trucy',
+    'jedsez',
+    'gunniho'
+   ];
   getTweets(usernames);
   
   //Get BART service advisories
