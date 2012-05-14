@@ -219,7 +219,7 @@ body{
 .tweetInfo {
   float:left;
   margin-right:14px;
-  width:100px;
+  width:130px;
 }
 
 .tweetHours {
@@ -230,7 +230,7 @@ body{
 
 .tweetStatus {
   float:left;
-  width:840px;
+  width:810px;
   font-size:20px;
 }
 
