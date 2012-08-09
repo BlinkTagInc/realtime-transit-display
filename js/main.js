@@ -333,20 +333,6 @@ function launchMap(){
     zoomControl: false,
     streetViewControl: false
   });
-  
-  /*
-  //Walking map styles -- needed if transit map stops working
-  
-  var styles=[{featureType:"road.arterial",elementType:"all",stylers:[{visibility:"simplified"}]},{featureType:"road",elementType:"all",stylers:[{visibility:"on"},{lightness:13}]},{featureType:"road",elementType:"all",stylers:[{visibility:"on"},{saturation:-14},{gamma:1.14},{lightness:29},{hue:"#ddff00"}]},{featureType:"administrative.country",elementType:"all",stylers:[{visibility:"off"}]},{featureType:"administrative.locality",elementType:"all",stylers:[{visibility:"off"}]},{featureType:"administrative.province",elementType:"all",stylers:[{visibility:"off"}]},{featureType:"landscape",elementType:"all",stylers:[{hue:"#ffc300"},{lightness:-24},{saturation:2}]},{featureType:"poi",elementType:"geometry",stylers:[{visibility:"on"},{lightness:-11},{saturation:20},{hue:"#a1ff00"}]},{featureType:"poi.medical",elementType:"all",stylers:[{visibility:"off"}]},{featureType:"poi.school",elementType:"all",stylers:[{visibility:"off"}]},{featureType:"road.highway",elementType:"labels",stylers:[{visibility:"off"}]},{featureType:"road.arterial",elementType:"geometry",stylers:[{saturation:-1},{lightness:64},{gamma:0.74}]},{featureType:"landscape.man_made",elementType:"all",stylers:[{hue:"#ffc300"},{lightness:26},{gamma:1.29}]},{featureType:"road.highway",elementType:"all",stylers:[{saturation:36},{lightness:-8},{gamma:0.96},{visibility:"off"}]},{featureType:"road.highway",elementType:"all",stylers:[{lightness:88},{gamma:3.78},{saturation:1},{visibility:"off"}]},
-  
-  var styledMapOptions = {
-     name: "walking"
-   }
-   var walkingMapType = new google.maps.StyledMapType(styles, styledMapOptions);
-   map.mapTypes.set('walking', walkingMapType);
-   map.setMapTypeId('walking');
-   
-  */
    
   //Add transit layer
   var transitOptions = {
@@ -412,12 +398,9 @@ function getTweets(usernames){
   var since_id = 0;
   
   function processTweet(tweet){
-    // Calculate how many hours ago was the tweet posted
-    var date_diff  = new Date() - new Date(tweet.created_at);
-    if(date_diff/(1000*60*60) < 1){
-      var time = Math.round(date_diff/(1000*60)) + " minutes";
-    } else {
-      var time = Math.round(date_diff/(1000*60*60)) + " hours";
+
+    if(tweet.text == undefined || tweet.id == since_id) {
+      return;
     }
     
     // Build the html string for the current tweet
@@ -427,36 +410,35 @@ function getTweets(usernames){
     tweet_html    += '<a href="http://www.twitter.com/';
     tweet_html    += tweet.from_user + '/status/' + tweet.id + '" class="tweetUser"">';
     tweet_html    += tweet.from_user + '</a> ';
-    tweet_html    += '<div class="tweetHours">' + time + ' ago</div>';
+    tweet_html    += '<div class="tweetHours timeago" title="' + tweet.created_at + '"></div>';
     tweet_html    += '</div>';
-    tweet_html    += '<div class="tweetStatus">';
-    tweet_html    += tweet.text.parseURL() + '</div>';
+    tweet_html    += '<div class="tweetStatus">' + tweet.text.parseURL() + '</div>';
     
     //Update 'since_id' if larger
     since_id = (tweet.id > since_id) ? tweet.id : since_id;
 
     // Append html string to tweet_container div
     $('#tweetContainer').append(tweet_html);
+
   }
   
   
   function updateTweets(){
     //Build URL using 'since_id' to find only new tweets
     var query_url = twitter_api_url + '?callback=?&rpp=25&since_id=' + since_id + '&q=';
-    for(var i in usernames){
-      //Add each username to query
-      query_url += 'from:' + usernames[i] + '+OR+';
-    }
+    $.each(usernames, function(i, username){
+      query_url += 'from:' + username + '+OR+';
+    });
+  
     //Add statement to find tweets referenceing @pwndepot
     query_url += '@pwndepot';
 
     $.getJSON( query_url,
       function(data) {
         $.each(data.results, function(i, tweet) {
-          if(tweet.text !== undefined && tweet.id != since_id) {
-            processTweet(tweet);
-          }
+          processTweet(tweet);
         });
+        $('.timeago').timeago();
       }
     );
   }
