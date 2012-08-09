@@ -97,7 +97,7 @@ body{
 }
 
 .departure{
-  margin-bottom:5px;
+  margin-bottom: 0.1em;
   clear:left;
   overflow:hidden;
 }

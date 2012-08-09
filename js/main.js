@@ -571,7 +571,7 @@ function resizeWindow() {
 }
 
 function resizeDepartures(){
-  var visibleHeight = $(window).height() - $('#pageTitle').height() - $('#tweetContainer').height();
+  var visibleHeight = $(window).height() - $('#pageTitle').height() - $('#tweetContainer').height() - 50;
   //Set #transitBox font-size to 100%;
   $('#transitBoxContainer').css('font-size','100%');
   var currentHeight = $('#transitBoxContainer').height();
