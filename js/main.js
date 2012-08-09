@@ -481,13 +481,16 @@ function processTweet(tweet){
   
   // Build the html string for the current tweet
   var statusUrl = 'http://www.twitter.com/' + tweet.from_user + '/status/' + tweet.id;
+  var qrUrl = 'http://api.qrserver.com/v1/create-qr-code/?data=' + encodeURIComponent(statusUrl) + '&size=55x55';
   var tweetHtml = '<div class="tweet">';
   tweetHtml    += '<img src="' + tweet.profile_image_url + '" class="tweetImage">';
   tweetHtml    += '<div class="tweetInfo">';
   tweetHtml    += '<a href="' + statusUrl + '" class="tweetUser">' + tweet.from_user + '</a> ';
   tweetHtml    += '<div class="tweetHours timeago" title="' + tweet.created_at + '"></div>';
   tweetHtml    += '</div>';
+  tweetHtml    += '<img src="' + qrUrl + '" class="tweetQR">';
   tweetHtml    += '<div class="tweetStatus">' + linkify(tweet) + '</div>';
+
 
   if (tweet.entities.media){
     //grab first image
