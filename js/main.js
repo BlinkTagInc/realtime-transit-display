@@ -1,5 +1,71 @@
-var map;
-var bartAPIKey = 'MW9S-E7SL-26DU-VV8V';
+var map
+  , bartAPIKey = 'MW9S-E7SL-26DU-VV8V'
+  , since_id = 0
+  , usernames = [
+    'brendannee',
+    'lstonehill',
+    '_nw_',
+    'karttime',
+    'lweite',
+    'jedhorne',
+    'woeismatt',
+    'cpetzold',
+    'rauchg',
+    'halfhenry',
+    'stevebice',
+    'w01fe',
+    'qago',
+    'blinktaginc',
+    'pwndepot',
+    'keussen',
+    'dduugg',
+    'juliebadoolie',
+    'mgougherty',
+    'jkeussen',
+    'carolinetien',
+    'trucy',
+    'jedsez',
+    'gunniho'
+   ];
+
+
+var linkify = (function() {
+  var replaceSubstr = function(text, i, j, substr) {
+    return text.substr(0, i) + substr + text.substr(j);
+  }
+
+  var mergeByIndices = function(a, b) {
+    var i = 0, j = 0, result = [];
+    while (i < a.length || j < b.length) {
+      if (i < a.length && (j >= b.length || a[i].indices[0] < b[j].indices[0]))
+        result.push(a[i++]);
+      else
+        result.push(b[j++]);
+    }
+    return result;
+  }
+
+  var linkEntity = function(entity) {
+    if (entity.name) // user mention
+      return "<a href=\"http://twitter.com/"+entity.screen_name+"\" class=\"user-mention\">@"+entity.screen_name+"</a>";
+    else if (entity.url) // url
+      return "<a href=\""+entity.url+"\" class=\"url\">"+entity.display_url+"</a>";
+    else // hashtag
+      return "<a href=\"http://twitter.com/search/%23"+entity.text+"\" class=\"hashtag\">#"+entity.text+"</a>";
+  }
+
+  var linkify = function(post) {
+    var text = post.text, offset = 0;
+    var entities = mergeByIndices(mergeByIndices(post.entities.hashtags, post.entities.urls), post.entities.user_mentions);
+    $.each(entities, function(i, entity) {
+      var new_substr = linkEntity(entity);
+      text = replaceSubstr(text, entity.indices[0] + offset, entity.indices[1] + offset, new_substr);
+      offset += new_substr.length - (entity.indices[1] - entity.indices[0]);
+    });
+    return text;
+  }
+  return linkify;
+})();
 
 function Label(opt_options) {
   // Initialization
@@ -323,7 +389,6 @@ function getMUNI(){
 
 
 function launchMap(){
-  
   map = new google.maps.Map(document.getElementById("map_canvas"), {
     zoom: 16,
     center: new google.maps.LatLng(37.76670, -122.41768),
@@ -383,81 +448,74 @@ function launchMap(){
   }
 }
 
-function getTweets(usernames){
-  
-  //Add parseURL to get links out of tweets
-  String.prototype.parseURL = function() {
-    return this.replace(/[A-Za-z]+:\/\/[A-Za-z0-9-_]+\.[A-Za-z0-9-_:%&~\?\/.=]+/g, function(url) {
-      return url.link(url);
-    });
-  };
-  
-  // Declare variables to hold twitter API url and user name
+function updateTweets(){
   var twitter_api_url = 'http://search.twitter.com/search.json';
-  
-  var since_id = 0;
-  
-  function processTweet(tweet){
 
-    if(tweet.text == undefined || tweet.id == since_id) {
-      return;
+  //Build URL using 'since_id' to find only new tweets
+  var query_url = twitter_api_url + '?callback=?&rpp=25&include_entities=true&since_id=' + since_id + '&q=';
+  $.each(usernames, function(i, username){
+    query_url += 'from:' + username + '+OR+';
+  });
+
+  //Add statement to find tweets referenceing @pwndepot
+  query_url += '@pwndepot';
+
+  $.getJSON( query_url,
+    function(data) {
+      $.each(data.results, function(i, tweet) {
+        processTweet(tweet);
+      });
+      $('.timeago').timeago();
     }
-    
-    // Build the html string for the current tweet
-    var tweet_html = '<div class="tweet">';
-    tweet_html    += '<img src="' + tweet.profile_image_url + '" class="tweetImage">';
-    tweet_html    += '<div class="tweetInfo">';
-    tweet_html    += '<a href="http://www.twitter.com/';
-    tweet_html    += tweet.from_user + '/status/' + tweet.id + '" class="tweetUser"">';
-    tweet_html    += tweet.from_user + '</a> ';
-    tweet_html    += '<div class="tweetHours timeago" title="' + tweet.created_at + '"></div>';
-    tweet_html    += '</div>';
-    tweet_html    += '<div class="tweetStatus">' + tweet.text.parseURL() + '</div>';
-    
-    //Update 'since_id' if larger
-    since_id = (tweet.id > since_id) ? tweet.id : since_id;
+  );
+}
 
-    // Append html string to tweet_container div
-    $('#tweetContainer').append(tweet_html);
-
+function processTweet(tweet){
+  //ignore @replies and blank tweets
+  if(tweet.text == undefined || tweet.id == since_id || tweet.to_user) {
+    return;
   }
   
-  
-  function updateTweets(){
-    //Build URL using 'since_id' to find only new tweets
-    var query_url = twitter_api_url + '?callback=?&rpp=25&since_id=' + since_id + '&q=';
-    $.each(usernames, function(i, username){
-      query_url += 'from:' + username + '+OR+';
-    });
-  
-    //Add statement to find tweets referenceing @pwndepot
-    query_url += '@pwndepot';
+  // Build the html string for the current tweet
+  var tweet_html = '<div class="tweet">';
+  tweet_html    += '<img src="' + tweet.profile_image_url + '" class="tweetImage">';
+  tweet_html    += '<div class="tweetInfo">';
+  tweet_html    += '<a href="http://www.twitter.com/';
+  tweet_html    += tweet.from_user + '/status/' + tweet.id + '" class="tweetUser"">';
+  tweet_html    += tweet.from_user + '</a> ';
+  tweet_html    += '<div class="tweetHours timeago" title="' + tweet.created_at + '"></div>';
+  tweet_html    += '</div>';
+  tweet_html    += '<div class="tweetStatus">' + linkify(tweet) + '</div>';
 
-    $.getJSON( query_url,
-      function(data) {
-        $.each(data.results, function(i, tweet) {
-          processTweet(tweet);
-        });
-        $('.timeago').timeago();
-      }
-    );
+  if(tweet.entities.media){
+    //grab first image
+    tweet_html += '<img src="' + tweet.entities.media[0].media_url + '" class="tweetMedia">';
   }
   
-  //Get updates every two minutes
-  updateTweets();
-  setInterval(updateTweets,120000);
+  //Update 'since_id' if larger
+  since_id = (tweet.id > since_id) ? tweet.id : since_id;
+
+  // Append html string to tweet_container div
+  $('#tweetContainer').append(tweet_html);
+
 }
 
 
 function rotateTweets(){
   var visibleTweet = $('#tweetContainer .tweet:visible');
   var nextTweet = $('#tweetContainer .tweet:visible').next();
+
+  if(nextTweet.length == 0){
+    nextTweet = $('#tweetContainer .tweet:first');
+  }
+
   visibleTweet.slideUp('fast',function(){
-    if(nextTweet.length != 0){
-      nextTweet.slideDown('fast');
-    } else {
-       $('#tweetContainer .tweet:first').slideDown('fast');
-    }
+    nextTweet.slideDown('fast', function(){
+      //scroll in image
+      $(".tweetMedia", nextTweet).css("right", "0px");
+
+      $(".tweetMedia").not($(".tweetMedia", nextTweet)).css("right", "-1000px");
+    });
   });
 }
 
@@ -511,19 +569,15 @@ function resizeDepartures(){
 }
 
 
-google.setOnLoadCallback(function(){
+$(document).ready(function(){
   
   //Resize Window
   resizeWindow();
   $(window).bind("resize", resizeWindow);
-  
-  // Rotate Tweets
-  setInterval(rotateTweets,10000);
 
   //Update Clock
   setInterval(updateClock, 1000);
 
-  //Do transit directions
   //Get BART
   getBART();
   setInterval(getBART,15000);
@@ -538,32 +592,13 @@ google.setOnLoadCallback(function(){
 
   //Launch Google Maps
   launchMap();
-  
-  //Get Tweets
-  var usernames = [
-    'brendannee',
-    'lstonehill',
-    '_nw_',
-    'lweite',
-    'jedhorne',
-    'woeismatt',
-    'halfhenry',
-    'stevebice',
-    'w01fe',
-    'qago',
-    'blinktaginc',
-    'pwndepot',
-    'keussen',
-    'dduugg',
-    'juliebadoolie',
-    'mgougherty',
-    'jkeussen',
-    'carolinetien',
-    'trucy',
-    'jedsez',
-    'gunniho'
-   ];
-  getTweets(usernames);
+
+  //Get updates every two minutes
+  updateTweets();
+  setInterval(updateTweets,120000);
+
+  // Rotate Tweets
+  setInterval(rotateTweets,10000);
   
   //Get BART service advisories
   getAdvisories();

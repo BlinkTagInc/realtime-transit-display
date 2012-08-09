@@ -196,6 +196,7 @@ body{
   width:1024px;
   padding:6px;
   margin:0 auto;
+  position: relative;
   display:none;
 }
 
@@ -234,3 +235,13 @@ body{
   font-size:20px;
 }
 
+.tweetMedia {
+  position: absolute;
+  bottom: 80px;
+  right: -1000px;
+  border: 2px solid rgba(0, 0, 0, 0.4);
+  -webkit-transition:all 1.0s ease-in-out;
+  -moz-transition:all 1.0s ease-in-out;
+  -o-transition:all 1.0s ease-in-out;
+  transition:all 1.0s ease-in-out;
+}
