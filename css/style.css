@@ -244,4 +244,7 @@ body{
   -moz-transition:all 1.0s ease-in-out;
   -o-transition:all 1.0s ease-in-out;
   transition:all 1.0s ease-in-out;
+  background: #E5E5E5;
+  max-width: 600px;
+  min-width: 200px;
 }

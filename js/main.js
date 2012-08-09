@@ -452,15 +452,15 @@ function updateTweets(){
   var twitter_api_url = 'http://search.twitter.com/search.json';
 
   //Build URL using 'since_id' to find only new tweets
-  var query_url = twitter_api_url + '?callback=?&rpp=25&include_entities=true&since_id=' + since_id + '&q=';
+  var queryUrl = twitter_api_url + '?callback=?&rpp=25&include_entities=true&since_id=' + since_id + '&q=';
   $.each(usernames, function(i, username){
-    query_url += 'from:' + username + '+OR+';
+    queryUrl += 'from:' + username + '+OR+';
   });
 
   //Add statement to find tweets referenceing @pwndepot
-  query_url += '@pwndepot';
+  queryUrl += '@pwndepot';
 
-  $.getJSON( query_url,
+  $.getJSON( queryUrl,
     function(data) {
       $.each(data.results, function(i, tweet) {
         processTweet(tweet);
@@ -471,33 +471,48 @@ function updateTweets(){
 }
 
 function processTweet(tweet){
+  //Update 'since_id' if larger
+  since_id = (tweet.id > since_id) ? tweet.id : since_id;
+
   //ignore @replies and blank tweets
   if(tweet.text == undefined || tweet.id == since_id || tweet.to_user) {
     return;
   }
   
   // Build the html string for the current tweet
-  var tweet_html = '<div class="tweet">';
-  tweet_html    += '<img src="' + tweet.profile_image_url + '" class="tweetImage">';
-  tweet_html    += '<div class="tweetInfo">';
-  tweet_html    += '<a href="http://www.twitter.com/';
-  tweet_html    += tweet.from_user + '/status/' + tweet.id + '" class="tweetUser"">';
-  tweet_html    += tweet.from_user + '</a> ';
-  tweet_html    += '<div class="tweetHours timeago" title="' + tweet.created_at + '"></div>';
-  tweet_html    += '</div>';
-  tweet_html    += '<div class="tweetStatus">' + linkify(tweet) + '</div>';
+  var statusUrl = 'http://www.twitter.com/' + tweet.from_user + '/status/' + tweet.id;
+  var tweetHtml = '<div class="tweet">';
+  tweetHtml    += '<img src="' + tweet.profile_image_url + '" class="tweetImage">';
+  tweetHtml    += '<div class="tweetInfo">';
+  tweetHtml    += '<a href="' + statusUrl + '" class="tweetUser">' + tweet.from_user + '</a> ';
+  tweetHtml    += '<div class="tweetHours timeago" title="' + tweet.created_at + '"></div>';
+  tweetHtml    += '</div>';
+  tweetHtml    += '<div class="tweetStatus">' + linkify(tweet) + '</div>';
 
-  if(tweet.entities.media){
+  if (tweet.entities.media){
     //grab first image
-    tweet_html += '<img src="' + tweet.entities.media[0].media_url + '" class="tweetMedia">';
+    tweetHtml += '<a href="' + statusUrl + '" class="tweetUser">';
+    tweetHtml += '<img src="' + tweet.entities.media[0].media_url + '" class="tweetMedia">';
+    tweetHtml += '</a>';
+    $('#tweetContainer').append(tweetHtml);
+  } else if (tweet.entities.urls && tweet.entities.urls.length) {
+    //use embed.ly to get image from first URL
+    var embedlyOptions = {
+        key: 'a264d15f7a9d4241bf7a216c6305c1fc'
+      , url: tweet.entities.urls[0].expanded_url
+      , maxwidth: 600
+    }
+    $.getJSON('http://api.embed.ly/1/oembed?callback=?', embedlyOptions, function(data){
+      if(data.thumbnail_url){
+        tweetHtml += '<a href="' + data.url + '" class="tweetUser">';
+        tweetHtml += '<img src="' + data.thumbnail_url + '" class="tweetMedia">';
+        tweetHtml += '</a>';
+      }
+      $('#tweetContainer').append(tweetHtml);
+    });
+  } else {
+    $('#tweetContainer').append(tweetHtml);
   }
-  
-  //Update 'since_id' if larger
-  since_id = (tweet.id > since_id) ? tweet.id : since_id;
-
-  // Append html string to tweet_container div
-  $('#tweetContainer').append(tweet_html);
-
 }
 
 
