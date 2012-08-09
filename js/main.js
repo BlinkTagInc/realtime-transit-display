@@ -445,7 +445,7 @@ function getTweets(usernames){
   
   //Get updates every two minutes
   updateTweets();
-  setInterval(updateTweets,12000);
+  setInterval(updateTweets,120000);
 }
 
 
