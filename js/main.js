@@ -578,30 +578,6 @@ function resizeDepartures(){
   }
 }
 
-function getIP() {
-  if (window.XMLHttpRequest) {
-    xmlhttp = new XMLHttpRequest();
-  } else {
-    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-  }
-
-  xmlhttp.open("GET","http://api.hostip.info/get_html.php",false);
-  xmlhttp.send();
-
-  hostipInfo = xmlhttp.responseText.split("\n");
-
-  for (i=0; hostipInfo.length >= i; i++) {
-    if(hostipInfo[i] && hostipInfo[i].length){
-      ipAddress = hostipInfo[i].split(":");
-      if ( ipAddress[0] == "IP" ) {
-        $('#ipContainer').html(ipAddress[1].trim());
-      }
-    }
-  }
-
-  return false;
-}
-
 function reloadPage(){
   window.location.reload(true);
 }
@@ -649,9 +625,6 @@ $(document).ready(function(){
   //Resize transit if needed
   resizeDepartures();
   setInterval(resizeDepartures, 1000);
-
-  //Get IP Address
-  getIP();
 
   //reload browser every 24 hours
   setInterval(reloadPage, 86400000);

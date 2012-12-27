@@ -284,10 +284,3 @@ body.noGradients {
   height:80px;
 }
 
-#ipContainer {
-  position: absolute;
-  bottom: 98px;
-  right: 10px;
-  font-size: 8px;
-  color: #bbb;
-}
