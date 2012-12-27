@@ -5,9 +5,7 @@ var map
     'brendannee',
     'lstonehill',
     '_nw_',
-    'karttime',
     'lweite',
-    'jedhorne',
     'woeismatt',
     'cpetzold',
     'rauchg',
@@ -30,7 +28,6 @@ var map
     'jedsez',
     'jeremyaaronlong',
     'Talyn',
-    'rooferford',
     'cedickie',
     'IKusturica'
    ];
