@@ -25,7 +25,14 @@ var map
     'carolinetien',
     'trucy',
     'jedsez',
-    'gunniho'
+    'gunniho',
+    'omalleycali',
+    'jedsez',
+    'jeremyaaronlong',
+    'Talyn',
+    'rooferford',
+    'cedickie',
+    'IKusturica'
    ];
 
 
