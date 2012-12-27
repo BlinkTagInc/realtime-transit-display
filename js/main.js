@@ -464,11 +464,12 @@ function updateTweets(){
 
   //Add statement to find tweets referenceing @pwndepot
   queryUrl += '@pwndepot';
-  $.getJSON( queryUrl, function(data) {
+  $.getJSON(queryUrl, function(data) {
     if(!data.results) return;
     $.each(data.results, function(i, tweet) {
       processTweet(tweet);
     });
+    $('#tweetSlider .timeago').timeago();
   });
 }
 
@@ -483,11 +484,11 @@ function processTweet(tweet){
   // Build the html string for the current tweet
   var statusUrl = 'http://www.twitter.com/' + tweet.from_user + '/status/' + tweet.id;
   var qrUrl = 'http://api.qrserver.com/v1/create-qr-code/?data=' + encodeURIComponent(statusUrl) + '&size=80x80';
-  var tweetHtml = '<div class="tweet">';
+  var tweetHtml = '<div class="tweet" id="' + tweet.id + '">';
   tweetHtml    += '<img src="' + tweet.profile_image_url.replace('_normal', '_bigger') + '" class="tweetImage">';
   tweetHtml    += '<div class="tweetInfo">';
   tweetHtml    += '<a href="' + statusUrl + '" class="tweetUser">' + tweet.from_user + '</a> ';
-  tweetHtml    += '<div class="tweetHours">' +  $.timeago(tweet.created_at) + '</div>';
+  tweetHtml    += '<div class="tweetHours timeago" title="' + tweet.created_at + '"></div>';
   tweetHtml    += '</div>';
   if(tweet.entities.media || (tweet.entities.urls && tweet.entities.urls.length)) {
     tweetHtml    += '<img src="' + qrUrl + '" class="tweetQR">';  
@@ -497,10 +498,7 @@ function processTweet(tweet){
 
   if (tweet.entities.media){
     //grab first image
-    tweetHtml += '<a href="' + statusUrl + '" class="tweetUser">';
-    tweetHtml += '<img src="' + tweet.entities.media[0].media_url + '" class="tweetMedia">';
-    tweetHtml += '</a>';
-    $('#tweetSlider').append(tweetHtml);
+    tweetHtml += '<a href="' + statusUrl + '"><img src="' + tweet.entities.media[0].media_url + '" class="tweetMedia"></a>';
   } else if (tweet.entities.urls && tweet.entities.urls.length) {
     //use embed.ly to get image from first URL
     var embedlyOptions = {
@@ -510,13 +508,12 @@ function processTweet(tweet){
     }
     $.getJSON('http://api.embed.ly/1/oembed?callback=?', embedlyOptions, function(data){
       if(data.thumbnail_url){
-        tweetHtml += '<a href="' + data.url + '"><img src="' + data.thumbnail_url + '" class="tweetMedia"></a>';
+        var mediaHtml = '<a href="' + data.url + '"><img src="' + data.thumbnail_url + '" class="tweetMedia"></a>';
+        $('#' + tweet.id).append(mediaHtml);
       }
-      $('#tweetSlider').append(tweetHtml);
     });
-  } else {
-    $('#tweetSlider').append(tweetHtml);
   }
+  $('#tweetSlider').append(tweetHtml);
 }
 
 
