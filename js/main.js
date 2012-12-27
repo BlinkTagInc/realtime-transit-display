@@ -1,6 +1,7 @@
 var map
   , bartAPIKey = 'MW9S-E7SL-26DU-VV8V'
   , since_id = 0
+  , tweetCounter = 0
   , usernames = [
     'brendannee',
     'lstonehill',
@@ -463,15 +464,12 @@ function updateTweets(){
 
   //Add statement to find tweets referenceing @pwndepot
   queryUrl += '@pwndepot';
-
-  $.getJSON( queryUrl,
-    function(data) {
-      $.each(data.results, function(i, tweet) {
-        processTweet(tweet);
-      });
-      $('.timeago').timeago();
-    }
-  );
+  $.getJSON( queryUrl, function(data) {
+    if(!data.results) return;
+    $.each(data.results, function(i, tweet) {
+      processTweet(tweet);
+    });
+  });
 }
 
 function processTweet(tweet){
@@ -482,17 +480,18 @@ function processTweet(tweet){
   if(tweet.text == undefined || tweet.id == since_id || tweet.to_user) {
     return;
   }
-  
   // Build the html string for the current tweet
   var statusUrl = 'http://www.twitter.com/' + tweet.from_user + '/status/' + tweet.id;
-  var qrUrl = 'http://api.qrserver.com/v1/create-qr-code/?data=' + encodeURIComponent(statusUrl) + '&size=55x55';
+  var qrUrl = 'http://api.qrserver.com/v1/create-qr-code/?data=' + encodeURIComponent(statusUrl) + '&size=80x80';
   var tweetHtml = '<div class="tweet">';
-  tweetHtml    += '<img src="' + tweet.profile_image_url + '" class="tweetImage">';
+  tweetHtml    += '<img src="' + tweet.profile_image_url.replace('_normal', '_bigger') + '" class="tweetImage">';
   tweetHtml    += '<div class="tweetInfo">';
   tweetHtml    += '<a href="' + statusUrl + '" class="tweetUser">' + tweet.from_user + '</a> ';
-  tweetHtml    += '<div class="tweetHours timeago" title="' + tweet.created_at + '"></div>';
+  tweetHtml    += '<div class="tweetHours">' +  $.timeago(tweet.created_at) + '</div>';
   tweetHtml    += '</div>';
-  tweetHtml    += '<img src="' + qrUrl + '" class="tweetQR">';
+  if(tweet.entities.media || (tweet.entities.urls && tweet.entities.urls.length)) {
+    tweetHtml    += '<img src="' + qrUrl + '" class="tweetQR">';  
+  }
   tweetHtml    += '<div class="tweetStatus">' + linkify(tweet) + '</div>';
 
 
@@ -501,7 +500,7 @@ function processTweet(tweet){
     tweetHtml += '<a href="' + statusUrl + '" class="tweetUser">';
     tweetHtml += '<img src="' + tweet.entities.media[0].media_url + '" class="tweetMedia">';
     tweetHtml += '</a>';
-    $('#tweetContainer').append(tweetHtml);
+    $('#tweetSlider').append(tweetHtml);
   } else if (tweet.entities.urls && tweet.entities.urls.length) {
     //use embed.ly to get image from first URL
     var embedlyOptions = {
@@ -511,34 +510,23 @@ function processTweet(tweet){
     }
     $.getJSON('http://api.embed.ly/1/oembed?callback=?', embedlyOptions, function(data){
       if(data.thumbnail_url){
-        tweetHtml += '<a href="' + data.url + '" class="tweetUser">';
-        tweetHtml += '<img src="' + data.thumbnail_url + '" class="tweetMedia">';
-        tweetHtml += '</a>';
+        tweetHtml += '<a href="' + data.url + '"><img src="' + data.thumbnail_url + '" class="tweetMedia"></a>';
       }
-      $('#tweetContainer').append(tweetHtml);
+      $('#tweetSlider').append(tweetHtml);
     });
   } else {
-    $('#tweetContainer').append(tweetHtml);
+    $('#tweetSlider').append(tweetHtml);
   }
 }
 
 
 function rotateTweets(){
-  var visibleTweet = $('#tweetContainer .tweet:visible');
-  var nextTweet = $('#tweetContainer .tweet:visible').next();
-
-  if(nextTweet.length == 0){
-    nextTweet = $('#tweetContainer .tweet:first');
+  var tweetLength = $('#tweetSlider .tweet').length;
+  ++tweetCounter;
+  if(tweetCounter >= (tweetLength - 1)) {
+    tweetCounter = 0;
   }
-
-  visibleTweet.slideUp('fast',function(){
-    nextTweet.slideDown('fast', function(){
-      //scroll in image
-      $(".tweetMedia", nextTweet).css("right", "0px");
-
-      $(".tweetMedia").not($(".tweetMedia", nextTweet)).css("right", "-1000px");
-    });
-  });
+  $('#tweetSlider').animate({'left': -50 * tweetCounter +'%'}, 'slow', 'swing');
 }
 
 function updateClock()
@@ -571,8 +559,8 @@ function updateClock()
 
 
 function resizeWindow() {
-  var newWindowHeight = $(window).height();
-  $(".container").css("height", newWindowHeight);
+  var newWindowHeight = $(window).height() - $('#tweetContainer').outerHeight() - $('#pageTitle').outerHeight();
+  $("#transitContainer").height(newWindowHeight);
   //Scale departures
   resizeDepartures();
 }
@@ -588,6 +576,27 @@ function resizeDepartures(){
     var percent = Math.ceil((1 - ((currentHeight - visibleHeight) / currentHeight)) * 100);
     $('#transitBoxContainer').css('font-size', percent + '%');
   }
+}
+
+function getIP() {
+if (window.XMLHttpRequest) xmlhttp = new XMLHttpRequest();
+    else xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+
+    xmlhttp.open("GET","http://api.hostip.info/get_html.php",false);
+    xmlhttp.send();
+
+    hostipInfo = xmlhttp.responseText.split("\n");
+
+    for (i=0; hostipInfo.length >= i; i++) {
+      if(hostipInfo[i] && hostipInfo[i].length){
+        ipAddress = hostipInfo[i].split(":");
+        if ( ipAddress[0] == "IP" ) {
+          $('#ipContainer').html(ipAddress[1].trim());
+        }
+      }
+    }
+
+    return false;
 }
 
 
@@ -613,7 +622,7 @@ $(document).ready(function(){
   getMUNI()
   setInterval(getMUNI, 15000);
   
-  //Get weather from SimpleGeo
+  //Get weather
   getWeather();
   setInterval(getWeather,1200000);
 
@@ -625,7 +634,7 @@ $(document).ready(function(){
   setInterval(updateTweets,120000);
 
   // Rotate Tweets
-  setInterval(rotateTweets,10000);
+  setInterval(rotateTweets,1000);
   
   //Get BART service advisories
   getAdvisories();
@@ -634,5 +643,8 @@ $(document).ready(function(){
   //Resize transit if needed
   resizeDepartures();
   setInterval(resizeDepartures,1000);
+
+  //Get IP Address
+  getIP();
   
 });

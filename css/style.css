@@ -17,7 +17,7 @@ body.noGradients {
  background: #ffffff;
 }
 
-.container{
+#transitContainer {
   width: 95%;
   margin: 0 auto;
   overflow:hidden;
@@ -45,8 +45,9 @@ body.noGradients {
 }
 
 #map_canvas{
-  width:600px;
-  height:350px;
+  width:59%;
+  height: 59%;
+  min-height:350px;
   float:right;
   border:1px solid #ccc;
 }
@@ -66,17 +67,29 @@ body.noGradients {
   font-weight:bold;
 }
 
-#transit_map{
-  width:600px;
-  float:right;
-  clear:right;
-  text-align:center;
-  background:#daf5ff;
+#transit_map {
+  width: 59%;
+  height: 38%;
+  float: right;
+  clear: right;
+  text-align: center;
+  background: #daf5ff;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+
+#transit_map img {
+  height: 100%;
+}
+
+#transitBoxContainer {
+  width: 40%;
+  float: left
+  min-width: 372px;
 }
 
 .transitBox{
   padding:0.3em 0 0;
-  width:23em;
   margin:0.2em;
 }
 
@@ -178,7 +191,7 @@ body.noGradients {
 #tweetContainer {
   position: absolute;
   bottom:0;
-  height:90px;
+  height:92px;
   width:100%;
   border-bottom:solid 1px #DEDEDE;
   background: #ffffff; /* Old browsers */
@@ -189,6 +202,12 @@ body.noGradients {
   background: -ms-linear-gradient(top, #ffffff 0%,#e5e5e5 100%); /* IE10+ */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e5e5e5',GradientType=0 ); /* IE6-9 */
   background: linear-gradient(top, #ffffff 0%,#e5e5e5 100%); /* W3C */
+}
+
+#tweetSlider {
+  position: relative;
+  white-space: nowrap;
+  height: 92px;
 }
 
 .noGradients #tweetContainer {
@@ -202,16 +221,15 @@ body.noGradients {
 }
 
 .tweet{
-  height:90px;
-  width:95%;
-  padding:6px;
-  margin:0 auto;
+  height:92px;
+  width:50%;
+  padding:6px 10px 6px 6px;
   position: relative;
-  display:none;
-}
-
-#tweetContainer .tweet:first-child{
-  display:block;
+  display: inline-block;
+  white-space: normal;
+  vertical-align: top;
+  border-right: 1px solid #bbb;
+  box-sizing: border-box;
 }
 
 .tweetUser{
@@ -230,6 +248,7 @@ body.noGradients {
 .tweetInfo {
   float:left;
   margin-right:14px;
+  height: 80px;
 }
 
 .tweetHours {
@@ -239,22 +258,22 @@ body.noGradients {
 }
 
 .tweetStatus {
-  float:left;
-  width:755px;
   font-size:20px;
+  height: 76px;
+  overflow: hidden;
 }
 
 .tweetMedia {
   position: absolute;
-  bottom: 80px;
-  right: -1000px;
+  bottom: 108px;
+  left: 2px;
   border: 2px solid rgba(0, 0, 0, 0.4);
   -webkit-transition:all 1.0s ease-in-out;
   -moz-transition:all 1.0s ease-in-out;
   -o-transition:all 1.0s ease-in-out;
   transition:all 1.0s ease-in-out;
   background: #E5E5E5;
-  max-width: 600px;
+  max-width: 99%;
   min-width: 200px;
 }
 
@@ -263,4 +282,12 @@ body.noGradients {
   margin-left: 7px;
   width:80px;
   height:80px;
+}
+
+#ipContainer {
+  position: absolute;
+  bottom: 98px;
+  right: 10px;
+  font-size: 8px;
+  color: #bbb;
 }
