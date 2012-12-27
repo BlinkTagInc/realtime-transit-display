@@ -579,26 +579,32 @@ function resizeDepartures(){
 }
 
 function getIP() {
-if (window.XMLHttpRequest) xmlhttp = new XMLHttpRequest();
-    else xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+  if (window.XMLHttpRequest) {
+    xmlhttp = new XMLHttpRequest();
+  } else {
+    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+  }
 
-    xmlhttp.open("GET","http://api.hostip.info/get_html.php",false);
-    xmlhttp.send();
+  xmlhttp.open("GET","http://api.hostip.info/get_html.php",false);
+  xmlhttp.send();
 
-    hostipInfo = xmlhttp.responseText.split("\n");
+  hostipInfo = xmlhttp.responseText.split("\n");
 
-    for (i=0; hostipInfo.length >= i; i++) {
-      if(hostipInfo[i] && hostipInfo[i].length){
-        ipAddress = hostipInfo[i].split(":");
-        if ( ipAddress[0] == "IP" ) {
-          $('#ipContainer').html(ipAddress[1].trim());
-        }
+  for (i=0; hostipInfo.length >= i; i++) {
+    if(hostipInfo[i] && hostipInfo[i].length){
+      ipAddress = hostipInfo[i].split(":");
+      if ( ipAddress[0] == "IP" ) {
+        $('#ipContainer').html(ipAddress[1].trim());
       }
     }
+  }
 
-    return false;
+  return false;
 }
 
+function reloadPage(){
+  window.location.reload(true);
+}
 
 $(document).ready(function(){
 
@@ -616,7 +622,7 @@ $(document).ready(function(){
 
   //Get BART
   getBART();
-  setInterval(getBART,15000);
+  setInterval(getBART, 15000);
   
   //Get MUNI
   getMUNI()
@@ -624,27 +630,30 @@ $(document).ready(function(){
   
   //Get weather
   getWeather();
-  setInterval(getWeather,1200000);
+  setInterval(getWeather, 1200000);
 
   //Launch Google Maps
   launchMap();
 
   //Get updates every two minutes
   updateTweets();
-  setInterval(updateTweets,120000);
+  setInterval(updateTweets, 120000);
 
   // Rotate Tweets
-  setInterval(rotateTweets,1000);
+  setInterval(rotateTweets, 10000);
   
   //Get BART service advisories
   getAdvisories();
-  setInterval(getAdvisories,1200000);
+  setInterval(getAdvisories, 1200000);
   
   //Resize transit if needed
   resizeDepartures();
-  setInterval(resizeDepartures,1000);
+  setInterval(resizeDepartures, 1000);
 
   //Get IP Address
   getIP();
+
+  //reload browser every 24 hours
+  setInterval(reloadPage, 86400000);
   
 });
