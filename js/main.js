@@ -595,6 +595,11 @@ function resizeDepartures(){
 
 
 $(document).ready(function(){
+
+  //detect color depth
+  if(screen.colorDepth < 24) {
+    $('body').addClass('noGradients');
+  }
   
   //Resize Window
   resizeWindow();

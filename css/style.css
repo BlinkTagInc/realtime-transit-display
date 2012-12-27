@@ -1,5 +1,5 @@
 html { height: 100% }
-body{
+body {
   font-family: 'Lato', arial, serif;
   margin:0;
   overflow:hidden;
@@ -13,13 +13,18 @@ body{
   background: linear-gradient(top, #ffffff 0%,#e5e5e5 100%); /* W3C */
 }
 
+body.noGradients {
+ background: #ffffff;
+}
+
 .container{
-  width:1024px;
+  width: 95%;
   margin: 0 auto;
   overflow:hidden;
 }
 
 #pageTitle{
+  height: 57px;
   background: #7d7e7d; /* Old browsers */
   background: -moz-linear-gradient(top, #7d7e7d 0%, #0e0e0e 100%); /* FF3.6+ */
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#7d7e7d), color-stop(100%,#0e0e0e)); /* Chrome,Safari4+ */
@@ -173,7 +178,7 @@ body{
 #tweetContainer {
   position: absolute;
   bottom:0;
-  height:65px;
+  height:90px;
   width:100%;
   border-bottom:solid 1px #DEDEDE;
   background: #ffffff; /* Old browsers */
@@ -186,14 +191,19 @@ body{
   background: linear-gradient(top, #ffffff 0%,#e5e5e5 100%); /* W3C */
 }
 
+.noGradients #tweetContainer {
+  border-top: #d0d0d0 1px solid;
+  background: #e5e5e5;
+}
+
 #tweetContainer a {
   text-decoration:none;
   color:#0C5F7D;
 }
 
 .tweet{
-  height:65px;
-  width:1024px;
+  height:90px;
+  width:95%;
   padding:6px;
   margin:0 auto;
   position: relative;
@@ -213,14 +223,13 @@ body{
   float:left;
   margin-right:7px;
   border:solid 2px #DEDEDE;
-  width:50px;
-  height:50px;
+  width:80px;
+  height:80px;
 }
 
 .tweetInfo {
   float:left;
   margin-right:14px;
-  width:130px;
 }
 
 .tweetHours {
@@ -252,6 +261,6 @@ body{
 .tweetQR {
   float: right;
   margin-left: 7px;
-  width:55px;
-  height:55px;
+  width:80px;
+  height:80px;
 }
