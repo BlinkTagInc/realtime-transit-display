@@ -463,6 +463,7 @@ function getLaheyisms() {
     tweetHtml    += '<img src="images/lahey.jpg" class="tweetImage">';
     tweetHtml    += '<div class="tweetInfo">';
     tweetHtml    += '<a href="http://laheyisms.com" class="tweetUser">Mr_Lahey</a> ';
+    tweetHtml    += '<div class="tweetHours timeago" title="Wed, 06 Jun 2006 21:32:26 +0000"></div>';
     tweetHtml    += '</div>';
     tweetHtml    += '<div class="tweetStatus">' + tweet.quote + '</div>';
 
