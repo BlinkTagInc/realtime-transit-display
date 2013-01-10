@@ -535,17 +535,16 @@ function processTweet(tweet){
 }
 
 
-function rotateTweets(){
-  var tweetLength = $('#tweetSlider .tweet').length;
-  ++tweetCounter;
-  if(tweetCounter >= (tweetLength - 1)) {
-    tweetCounter = 0;
-  }
-  $('#tweetSlider').animate({'left': -50 * tweetCounter +'%'}, 'slow', 'swing');
+function rotateTweets() {
+  var tweet = $('#tweetSlider .tweet:first-child');
+  $('#tweetSlider').animate({'left': '-50%'}, 'slow', function(){
+    $('#tweetSlider')
+      .append(tweet)
+      .css('left', 0);
+  });
 }
 
-function updateClock()
-{
+function updateClock() {
   var currentTime = new Date();
 
   var currentHours = currentTime.getHours();
