@@ -453,6 +453,23 @@ function launchMap(){
   }
 }
 
+function getLaheyisms() {
+  $.getJSON('js/laheyisms.json', function(data){
+    var rand = Math.floor(Math.random()*data.documents.length);
+    var tweet = data.documents[rand];
+
+    // Build the html string for the current tweet
+    var tweetHtml = '<div class="tweet">';
+    tweetHtml    += '<img src="images/lahey.jpg" class="tweetImage">';
+    tweetHtml    += '<div class="tweetInfo">';
+    tweetHtml    += '<a href="http://laheyisms.com" class="tweetUser">Mr_Lahey</a> ';
+    tweetHtml    += '</div>';
+    tweetHtml    += '<div class="tweetStatus">' + tweet.quote + '</div>';
+
+    $('#tweetSlider').append(tweetHtml);
+  });
+}
+
 function updateTweets(){
   var twitter_api_url = 'http://search.twitter.com/search.json';
 
@@ -611,6 +628,9 @@ $(document).ready(function(){
   //Get updates every two minutes
   updateTweets();
   setInterval(updateTweets, 120000);
+
+  //Get laheyisms
+  getLaheyisms();
 
   // Rotate Tweets
   setInterval(rotateTweets, 10000);
