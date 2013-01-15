@@ -3,34 +3,37 @@ var map
   , since_id = 0
   , tweetCounter = 0
   , usernames = [
-    'brendannee',
-    'lstonehill',
-    '_nw_',
-    'lweite',
-    'woeismatt',
-    'cpetzold',
-    'rauchg',
-    'halfhenry',
-    'stevebice',
-    'w01fe',
-    'qago',
-    'blinktaginc',
-    'pwndepot',
-    'keussen',
-    'dduugg',
-    'juliebadoolie',
-    'mgougherty',
-    'jkeussen',
-    'carolinetien',
-    'trucy',
-    'jedsez',
-    'gunniho',
-    'omalleycali',
-    'jedsez',
-    'jeremyaaronlong',
-    'Talyn',
-    'cedickie',
-    'IKusturica'
+    'from:pwndepot',
+    '@pwndepot',
+    'from:brendannee',
+    'from:lstonehill',
+    'from:_nw_',
+    'from:lweite',
+    'from:woeismatt',
+    'from:cpetzold',
+    'from:rooferford',
+    'from:rauchg',
+    'from:halfhenry',
+    'from:stevebice',
+    'from:w01fe',
+    'from:qago',
+    'from:blinktaginc',
+    'from:keussen',
+    'from:dduugg',
+    'from:juliebadoolie',
+    'from:mgougherty',
+    'from:jkeussen',
+    'from:carolinetien',
+    'from:trucy',
+    'from:jedsez',
+    'from:gunniho',
+    'from:omalleycali',
+    'from:jedsez',
+    'from:jeremyaaronlong',
+    'from:Talyn',
+    'from:cedickie',
+    'from:IKusturica',
+    'from:betula82'
    ];
 
 
@@ -62,7 +65,7 @@ var linkify = (function() {
   var linkify = function(post) {
     var text = post.text, offset = 0;
     var entities = mergeByIndices(mergeByIndices(post.entities.hashtags, post.entities.urls), post.entities.user_mentions);
-    $.each(entities, function(i, entity) {
+    entities.forEach(function(entity) {
       var new_substr = linkEntity(entity);
       text = replaceSubstr(text, entity.indices[0] + offset, entity.indices[1] + offset, new_substr);
       offset += new_substr.length - (entity.indices[1] - entity.indices[0]);
@@ -174,7 +177,7 @@ function getBART(){
       //Sort departures
       bart.sort(bartSortHandler);
       
-      $.each(bart, function(i, departure){
+      bart.forEach(function(departure){
         if(departure.direction == 'North'){
           $('#bartNorth .departures').append(departure.div);
         } else {
@@ -472,22 +475,33 @@ function getLaheyisms() {
 }
 
 function updateTweets(){
+  var batchSize = 20,
+      batchCount = Math.ceil(usernames.length / batchSize),
+      idx = 0,
+      responseCount = 0,
+      tweets = [];
+  while(idx < batchCount) {
+    getTweets(usernames.slice((idx * batchSize), ((idx+1) * batchSize)), function(results){
+      tweets = tweets.concat(results);
+      ++responseCount;
+      if(responseCount >= batchCount){
+        //processTweets
+        tweets.forEach(processTweet);
+        $('#tweetSlider .timeago').timeago();
+      }
+    });
+    ++idx;
+  }
+}
+
+function getTweets(users, cb){
   var twitter_api_url = 'http://search.twitter.com/search.json';
 
   //Build URL using 'since_id' to find only new tweets
-  var queryUrl = twitter_api_url + '?callback=?&rpp=25&include_entities=true&since_id=' + since_id + '&q=';
-  $.each(usernames, function(i, username){
-    queryUrl += 'from:' + username + '+OR+';
-  });
+  var queryUrl = twitter_api_url + '?callback=?&rpp=25&include_entities=true&since_id=' + since_id + '&q=' + users.join('+OR+');
 
-  //Add statement to find tweets referenceing @pwndepot
-  queryUrl += '@pwndepot';
   $.getJSON(queryUrl, function(data) {
-    if(!data.results) return;
-    $.each(data.results, function(i, tweet) {
-      processTweet(tweet);
-    });
-    $('#tweetSlider .timeago').timeago();
+    cb(data.results || null);
   });
 }
 
@@ -643,7 +657,7 @@ $(document).ready(function(){
   resizeDepartures();
   setInterval(resizeDepartures, 1000);
 
-  //reload browser every 24 hours
-  setInterval(reloadPage, 86400000);
+  //reload browser every 6 hours
+  setInterval(reloadPage, 21600000);
   
 });
