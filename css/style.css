@@ -17,20 +17,15 @@ header {
 #main {
   height: 100%;
 }
-#nearby {
-  background: rgba(255,255,255,0.05);
-  padding: 0 20px;
-  height: 100%;
-}
 #main .grid-three {
   width: 33.333%;
+  min-width: 415px;
   float: left;
   min-height: 20px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   -webkit-overflow-scrolling: touch;
-  overflow-y: scroll;
 }
 #main .grid-three:nth-of-type(1) {
   border-top: 3px solid rgb(222, 0, 255);
@@ -43,9 +38,9 @@ header {
 }
 h2 {
   text-transform: uppercase;
-  margin: 20px 0 0 20px;
+  margin: 20px 0 0 30px;
   background: rgba(0, 0, 0, 0.1);
-  width: 306px;
+  width: 381px;
   padding: 0 4px;
   box-sizing: border-box;
   letter-spacing: 1px;
@@ -61,78 +56,80 @@ h3 {
 .bart {
   float: left;
   clear: both;
-  margin: 2px 0 0 20px;
+  margin: 2px 0 0 30px;
 }
 .muni .destinationContainer {
-  width: 30px;
-  height: 100px;
+  width: 38px;
+  height: 125px;
   float: left;
   position: relative;
-  margin: 0 2px;
+  margin: 0 3px;
 }
 
 .muni .rotate {
-  width: 100px;
-  height: 30px;
-  font-size: 10px;
+  width: 125px;
+  height: 38px;
+  font-size: 12px;
   padding: 2px;
   box-sizing: border-box;
   background: rgba(0, 0, 0, 0.1);
   position: absolute;
   bottom: 0;
+  text-align: center;
 }
 .busnumber {
-  font-size: 48px;
-  float: left;
-  height: 100px;
-  width: 100px;
-  text-align: center;
-  line-height: 100px;
-}
-.nextbus {
   font-size: 60px;
   float: left;
-  height: 100px;
-  line-height: 100px;
-  width: 120px;
+  height: 125px;
+  width: 125px;
+  text-align: center;
+  line-height: 125px;
+}
+.nextbus {
+  font-size: 75px;
+  float: left;
+  height: 125px;
+  line-height: 125px;
+  width: 150px;
   text-align: center;
   background: rgba(0,0,0,0.1);
 }
 .laterbuses {
   float: left;
-  height: 100px;
+  height: 125px;
   margin-left: 2px;
   background: rgba(0,0,0,0.1);
 }
 .laterbuses .time {
-  height: 49px;
-  width: 50px;
+  height: 61px;
+  width: 62.5px;
   text-align: center;
-  line-height: 50px;
+  line-height: 62.5px;
   margin: 0;
+  font-size: 20px;
 }
 .laterbuses .time:first-child {
-  border-bottom: 2px solid #2f363c;
+  border-bottom: 3px solid #2f363c;
 }
 .bart .destination {
   float: left;
-  height: 80px;
-  width: 134px;
+  height: 100px;
+  width: 166px;
   box-sizing: border-box;
-  padding: 15px 4px 0;
+  padding: 20px 4px 0;
   overflow:hidden;
-  font-size: 18px;
+  font-size: 24px;
   text-align: center;
   position: relative;
 }
 .bart .nextbus,
 .bart .laterbuses {
-  height: 80px;
-  line-height: 80px;
+  height: 100px;
+  line-height: 100px;
 }
 .bart .laterbuses .time {
-  height: 39px;
-  line-height: 40px;
+  height: 49px;
+  line-height: 50px;
 }
 #muni12_4669 .busnumber,
 #muni12_4668 .busnumber {
@@ -157,9 +154,9 @@ h3 {
   background: #b4304f;
 }
 #time {
-  margin-left: 20px;
+  margin-left: 30px;
   background: rgba(0,0,0,0.1);
-  width: 306px;
+  width: 381px;
   height: 80px;
   overflow: hidden;
   padding-left: 10px;
@@ -183,9 +180,9 @@ h3 {
   float: right;
 }
 #weather {
-  width: 306px;
-  padding: 7px 0 0 20px;
-  margin-left: 20px;
+  width: 381px;
+  padding: 7px 0 0 30px;
+  margin-left: 30px;
   background: rgba(0,0,0,0.1);
   height:80px;
   box-sizing: border-box;
@@ -196,7 +193,7 @@ h3 {
 }
 #weather .forecast {
   display: inline-block;
-  font-size: 11px;
+  font-size: 12px;
   width: 175px;
 }
 #weather .forecast img {
@@ -205,11 +202,11 @@ h3 {
   width: 50px;
 }
 .rotate {
-  -webkit-transform: rotate(-90deg) translateY(30px);
-  -moz-transform: rotate(-90deg) translateY(30px);
-  -ms-transform: rotate(-90deg) translateY(30px);
-  -o-transform: rotate(-90deg) translateY(30px);
-  transform: rotate(-90deg) translateY(30px);
+  -webkit-transform: rotate(-90deg) translateY(38px);
+  -moz-transform: rotate(-90deg) translateY(38px);
+  -ms-transform: rotate(-90deg) translateY(38px);
+  -o-transform: rotate(-90deg) translateY(38px);
+  transform: rotate(-90deg) translateY(38px);
 
   /* also accepts left, right, top, bottom coordinates; not required, but a good idea for styling */
   -webkit-transform-origin: bottom left;
