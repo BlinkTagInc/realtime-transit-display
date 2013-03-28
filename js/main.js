@@ -154,7 +154,7 @@ function getAdvisories(){
     },
     dataType: 'xml',
     success:function(result){
-      $('#advisories').html('');
+      $('#advisories').empty();
       $(result).find('bsa').each(function(i, data){
         //Process alert
         $('#advisories').append('<div>Alert: ' + data.description + '<br>' + data.posted + '</div>');
@@ -398,7 +398,7 @@ $(document).ready(function(){
   
   //Get BART service advisories
   getAdvisories();
-  setInterval(getAdvisories, 1200000);
+  setInterval(getAdvisories, 60000);
   
   //Resize transit if needed
   resizeDepartures();
