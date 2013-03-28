@@ -1,29 +1,27 @@
 Realtime-Transit-Display
 =========
 
-A realtime transit display meant for a kiosk with no user interaction.  It shows realtime arrivals of MUNI and BART transit vehicles for nearby stations, current weather, a local map and relevant tweets.
+A realtime transit display meant for a kiosk with no user interaction.  It shows realtime arrivals of MUNI and BART transit vehicles for nearby stations, current time and weather.
 
 ### Example ###
 
-You can see the Realtime Transit Display in use at [pwn.blinktag.com](http://pwn.blinktag.com)
+You can see the Realtime Transit Display in use at [transit.bn.ee](http://transit.bn.ee)
 
 ### APIs ###
 
-* [SimpleGeo](http://simplegeo.com) for weather
 * [Google Maps](http://maps.google.com)
 * [BART API](http://api.bart.gov)
 * [NextMUNI API](http://www.sfmta.com/cms/asite/nextmunidata.htm)
-* [Twitter Search API](https://search.twitter.com/api/)
 
 ### Credits ###
 
-Brendan Nee brendan@blinktag.com
+Brendan Nee me@bn.ee
 
 ### License ###
 
 (The MIT License)
 
-Copyright (c) 2010 BlinkTag Inc &lt;info@blinktag.com&gt;
+Copyright (c) 2013 Brendan Nee &lt;me@bn.ee&gt;
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the

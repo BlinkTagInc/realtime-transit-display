@@ -1,80 +1,55 @@
-var map
-  , bartAPIKey = 'MW9S-E7SL-26DU-VV8V';
+var bartAPIKey = 'MW9S-E7SL-26DU-VV8V';
 
-function Label(opt_options) {
-  // Initialization
-  this.setValues(opt_options);
-
-  // Label specific
-  var span = this.span_ = document.createElement('span');
-  span.className += 'map_label';
-
-  var div = this.div_ = document.createElement('div');
-  div.appendChild(span);
-  div.style.cssText = 'position: absolute; display: none';
-  };
-  Label.prototype = new google.maps.OverlayView;
-
-  // Implement onAdd
-  Label.prototype.onAdd = function() {
-  var pane = this.getPanes().overlayLayer;
-  pane.appendChild(this.div_);
-
-  // Ensures the label is redrawn if the text or position is changed.
-  var me = this;
-  this.listeners_ = [
-  google.maps.event.addListener(this, 'position_changed',
-     function() { me.draw(); }),
-  google.maps.event.addListener(this, 'text_changed',
-     function() { me.draw(); })
-  ];
-  };
-
-  // Implement onRemove
-  Label.prototype.onRemove = function() {
-  this.div_.parentNode.removeChild(this.div_);
-
-  // Label is removed from the map, stop updating its position/text.
-  for (var i = 0, I = this.listeners_.length; i < I; ++i) {
-  google.maps.event.removeListener(this.listeners_[i]);
-  }
-  };
-
-  // Implement draw
-  Label.prototype.draw = function() {
-  var projection = this.getProjection();
-  var position = projection.fromLatLngToDivPixel(this.get('position'));
-
-  var div = this.div_;
-  div.style.left = position.x + 'px';
-  div.style.top = position.y + 'px';
-  div.style.display = 'block';
-
-  this.span_.innerHTML = this.get('text').toString();
+jQuery.fn.orderBy = function(keySelector)
+{
+    return this.sort(function(a,b)
+    {
+        a = keySelector.apply(a);
+        b = keySelector.apply(b);
+        if (a > b)
+            return 1;
+        if (a < b)
+            return -1;
+        return 0;
+    });
 };
 
-function getWeather(){
-  
+
+function updateWeather() {
   //Get weather from Wunderground via YQL
   $.getJSON('https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D%22http%3A%2F%2Fapi.wunderground.com%2Fweatherstation%2FWXCurrentObXML.asp%3FID%3DKCASANFR58%22&format=json&callback=?',function(data){
     //Current conditions
-    $('#weather .temp').html(Math.round(data.query.results.current_observation.temp_f) + '&deg;');
+    var temp = Math.round(data.query.results.current_observation.temp_f);
+    $('#weather .temp')
+      .css('color', colorTemp(temp))
+      .html(temp + '&deg;');
   });
   $.getJSON('https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D%22http%3A%2F%2Fapi.wunderground.com%2Fauto%2Fwui%2Fgeo%2FForecastXML%2Findex.xml%3Fquery%3D94103%22&format=json&callback=?',function(data){
     //Forecast
     var forecast = data.query.results.forecast.simpleforecast.forecastday[0];
     $('#weather .forecast').html(
       '<img src="http://icons-ak.wxug.com/i/c/a/' + forecast.icon + '.gif" class="weathericon">' +
-      '<strong>' + forecast.conditions + '</strong>' +
-      '<br>Range: <strong>' + forecast.low.fahrenheit + '&deg;F' + 
-      ' - ' + forecast.high.fahrenheit + '&deg;F' + '</strong>' +
-      '<br>Precip: <strong>' + forecast.pop + '%</strong>'
+      forecast.conditions + 
+      '<br>Range: <span style="color:' + colorTemp(forecast.low.fahrenheit) + ';">' + forecast.low.fahrenheit + '&deg;F</span>' + 
+      ' - <span style="color:' + colorTemp(forecast.high.fahrenheit) + ';">' + forecast.high.fahrenheit + '&deg;F' + '</span>' +
+      '<br>Precip: ' + forecast.pop + '%'
     );
   });
+
+  function colorTemp(temp) {
+    var color = Math.round( 255 - Math.abs(temp - 65) * (255 / 65) );
+    if(temp > 65) {
+      //its hot
+      return 'rgb(255,' + color + ',' + color + ')';
+    } else {
+      //its cold
+      return 'rgb(' + color + ',' + color + ',255)';
+    }
+  }
 }
 
 
-function getBART(){
+function updateBART(){
   var url = 'http://api.bart.gov/api/etd.aspx';
   
   var bart = [];
@@ -89,8 +64,7 @@ function getBART(){
     },
     dataType: 'xml',
     success:function(result){
-      $('#bartNorth .departures').html('');
-      $('#bartSouth .departures').html('');
+      $('#bart-north, #bart-south').empty();
       
       $(result).find('etd').each(function(i, data){
         //Process directions
@@ -104,84 +78,60 @@ function getBART(){
       bart.sort(bartSortHandler);
       
       bart.forEach(function(departure){
-        if(departure.direction == 'North'){
-          $('#bartNorth .departures').append(departure.div);
-        } else {
-          $('#bartSouth .departures').append(departure.div);
-        }
+        $(departure.div).appendTo( (departure.direction == 'North') ? $('#bart-north') : $('#bart-south'));
       });
     }
   });
   
   function addDirection(data){
-    var departure = {};
+    var departure = {
+      destination: $(data).find('destination').text(),
+      times: []
+    };
     
-    departure.destination = $(data).find('destination').text();
-    
-    switch(departure.destination){
-      case 'Dublin/Pleasanton':
-        var color = '#00aeef';
-        break;
-      case 'Pittsburg/Bay Point':
-        var color = '#ffe800';
-        break;
-      case 'Concord':
-        var color = '#ffe800';
-        break;
-      case 'North Concord':
-        var color = '#ffe800';
-        break;
-      case 'Richmond':
-        var color = '#ed1c24';
-        break;
-      case 'Fremont':
-        var color = '#4db848';
-        break;
-      case 'Daly City':
-        var color = '#00aeef';
-        break;
-      case 'SFO/Millbrae':
-        var color = '#ffe800';
-        break;
-      case 'SF Airport':
-        var color = '#ffe800';
-        break;
-      case 'Millbrae':
-        var color = '#ed1c24';
-        break;
-      default:
-        var color = '#a8a9a9';
+    if(departure.destination == 'Dublin/Pleasanton') {
+      departure.destination = 'Dublin/ Pleasanton';
     }
-    
-    departure.div = '<div class="departure">';
-    departure.div += '<div class="colorbox" style="background:' + color + '"></div>';
-    departure.div += '<div class="destination">' + departure.destination + '</div>';
-    departure.div += '<div class="times">';
-    
-    departure.times = [];
     
     $(data).find('estimate').each(function(j, data){
       //Only add times where minutes are less than 100
       if($(data).find('minutes').text() < 100){
         //Convert "Arrived" to "Arr"
         var minutes = ($(data).find('minutes').text() == 'Arrived') ? 0 : $(data).find('minutes').text();
-        
+        departure.hexcolor = $(data).find('hexcolor').text();
+        departure.color = $(data).find('color').text();
         departure.times.push(minutes);
-        
         departure.direction = $(data).find('direction').text();
-
-        departure.div += '<span>' + minutes + ' min</span>';
       }
     });
-    departure.div += '</div>';
-    departure.div += '</div>';
+    
+    departure.div = $('<div>')
+      .addClass('bart')
+      .append($('<div>')
+        .addClass('destination')
+        .css('background', departure.hexcolor)
+        .css('color', (departure.color == 'YELLOW') ? '#333' : '#FFF')
+        .html(departure.destination))
+      .append($('<div>')
+        .addClass('nextbus'))
+      .append($('<div>')
+        .addClass('laterbuses')
+        .append($('<div>')
+          .addClass('time'))
+        .append($('<div>')
+          .addClass('time')));
+
+    departure.times.forEach(function(time, idx){
+      if(idx == 0) {
+        $('.nextbus', departure.div).html(time);
+        $('.laterbuses .time', departure.div).empty();
+      } else {
+        $($('.laterbuses .time', departure.div).get((idx - 1))).html(time);
+      }
+    })
     
     //Check if first time is less than 40 minutes away. If not, discard entire destination
-    if(departure.times[0] < 40){
-      return departure;
-    } else {
-      return false;
-    }
+    return (departure.times[0] < 40) ? departure : false;
   }
     
   function bartSortHandler(a, b){
@@ -213,200 +163,186 @@ function getAdvisories(){
   });
 }
 
-function getMUNI(){
+
+function updateMUNI(){
   //Define Muni Roures
-  var MUNIroutes = [
-  {
-    route: 12,
-    stop:4668
-  },
-  {
-    route: 12,
-    stop:4669
-  },
-  {
-    route: 49,
-    stop:5551
-  },
-  {
-    route: 49,
-    stop:5552
-  },
-  {
-    route: 14,
-    stop:5551
-  },
-  {
-    route: 14,
-    stop:5552
-  },
-  {
-    route: '14L',
-    stop:5551
-  },
-  {
-    route: '14L',
-    stop:5552
-  },
-  {
-    route: 22,
-    stop:7289
-  },
-  {
-    route: 22,
-    stop:3293
-  },
-  {
-    route: 33,
-    stop:7289
-  },
-  {
-    route: 33,
-    stop:3299
-  },
-  {
-    route: 'N',
-    stop:6996
-  },
-  {
-    route: 'N OWL',
-    stop:5696
-  }
+ var MUNIroutes = [
+    {
+      route: 12,
+      stop:4668,
+      direction: 'north',
+      destination: 'Folsom to Downtown'
+    },
+    {
+      route: 12,
+      stop:4669,
+      direction: 'south',
+      destination: 'Folsom to 24th St'
+    },
+    {
+      route: 49,
+      stop:5551,
+      direction: 'north',
+      destination: 'Van Ness to Ft Mason'
+
+    },
+    {
+      route: 49,
+      stop:5552,
+      direction: 'south',
+      destination: 'Mission to Excelsior'
+    },
+    {
+      route: 14,
+      stop:5551,
+      direction: 'north',
+      destination: 'Mission to Transbay Terminal'
+    },
+    {
+      route: 14,
+      stop:5552,
+      direction: 'south',
+      destination: 'Mission to Excelsior'
+    },
+    {
+      route: '14L',
+      stop:5551,
+      direction: 'north',
+      destination: 'Mission to Transbay Terminal'
+    },
+    {
+      route: '14L',
+      stop:5552,
+      direction: 'south',
+      destination: 'Mission to Excelsior'
+    },
+    {
+      route: 22,
+      stop:7289,
+      direction: 'north',
+      destination: 'Fillmore to Marina'
+    },
+    {
+      route: 22,
+      stop:3299,
+      direction: 'east',
+      destination: '16th to Potrero Hill'
+    },
+    {
+      route: 33,
+      stop:7289,
+      direction: 'west',
+      destination: '18th to the Haight & Richmond'
+    },
+    {
+      route: 33,
+      stop:3299,
+      direction: 'east',
+      destination: '16th to Potrero Hill and Transbay Term.'
+    }
   ];
   
-  var url = 'http://webservices.nextbus.com/service/publicXMLFeed';
-  
-  function getRoute(route, stop){
-    //Request Departures
+  var url = 'http://webservices.nextbus.com/service/publicXMLFeed',
+      callbackCount = 0;
+
+  //Loop through all routes
+  MUNIroutes.forEach(function(route) {
     $.ajax({
       url: url,
       data: {
         command: 'predictions',
         a: 'sf-muni',
-        r: route,
-        s: stop
+        r: route.route,
+        s: route.stop
       },
       dataType: 'xml',
       success:function(result){
-        var div = $('#muni' + route.toString().replace(/\s/g, '') + '_' + stop);
+        var divName = 'muni' + route.route.toString().replace(/\s/g, '') + '_' + route.stop,
+            div = $('#'+ divName),
+            routeName = route.route.toString().replace(/\s\D+/g, "<span>$&</span>").replace(/(\d)(L)/g, "$1<span>$2</span>"),
+            predictions = $(result).find('prediction');
+
+        callbackCount++;
+
+        if(!div.length) {
+          div = $('<div>')
+            .addClass('muni')
+            .attr('id', divName)
+            .appendTo('#muni-' + route.direction);
+        }
+        div
+          .empty()
+          .append($('<div>')
+            .addClass('busnumber')
+            .html(routeName))
+          .append($('<div>').addClass('destinationContainer')
+            .append($('<div>')
+              .addClass('rotate')
+              .html(route.destination)))
+          .append($('<div>')
+            .addClass('nextbus time'))
+          .append($('<div>')
+            .addClass('laterbuses')
+            .append($('<div>')
+              .addClass('time'))
+            .append($('<div>')
+              .addClass('time')));
         
-        //Clear old times
-        $('.times', div).html('');
-        
-        //Check if route is still running
-        if($(result).find('prediction').length > 0){
-          div.show();
-          
-          var count = 0;
-          
-          $(result).find('prediction').each(function(i, data){
-            //Limit to 3 results, only show times less than 100, don't show results that are 0
-            if(count < 3 && $(data).attr('minutes') < 100 && $(data).attr('minutes') > 0){
-              
-              $('.times', div).append('<span>' + $(data).attr('minutes') + ' min</span>');
-              
-              count++;
-            }
+        var idx = 0;
+        predictions.each(function(i, data){
+          //Limit to 3 results, only show times less than 100, don't show results that are 0
+          if(idx < 3 && $(data).attr('minutes') < 100 && $(data).attr('minutes') > 0){
+            $('.time', div).eq(idx).html($(data).attr('minutes'));
+            idx++;
+          }
+        });
+
+        //hide if no predictions
+        div.toggle((predictions.length > 0));
+
+        if(callbackCount == MUNIroutes.length) {
+          $('.muniContainer').each(function(idx, muniContainer){
+            $('.muni', muniContainer).orderBy(function() {return +$('.nextbus', this).text();}).appendTo(muniContainer);
           });
-        } else {
-          div.hide();
         }
       }
     });
-  }
-
-  //Loop through all routes
-  for(var i in MUNIroutes){
-    getRoute(MUNIroutes[i].route, MUNIroutes[i].stop);
-  }
-}
-
-
-function launchMap(){
-  map = new google.maps.Map(document.getElementById("map_canvas"), {
-    zoom: 16,
-    center: new google.maps.LatLng(37.76670, -122.41768),
-    mapTypeId: google.maps.MapTypeId.ROADMAP,
-    mapTypeControl: false,
-    panControl: false,
-    zoomControl: false,
-    streetViewControl: false
   });
-   
-  //Add transit layer
-  var transitOptions = {
-    getTileUrl: function(coord, zoom) {
-      return "http://mt1.google.com/vt/lyrs=m@155076273,transit:comp|vm:&hl=en&opts=r&s=Galil&" +
-      "z=" + zoom + "&x=" + coord.x + "&y=" + coord.y;
-    },
-    tileSize: new google.maps.Size(256, 256),
-    isPng: true
-  };
-  
-  var transitMapType = new google.maps.ImageMapType(transitOptions);
-  map.overlayMapTypes.insertAt(0, transitMapType);
-  
-  //Pwn Depot Marker
-  var marker = new google.maps.Marker({
-    position: new google.maps.LatLng(37.76616, -122.41688),
-    map: map,
-    icon: 'http://pwn.blinktag.com/images/thepwndepot.png',
-    shadow: 'http://pwn.blinktag.com/images/thepwndepot_shadow.png',
-    clickable: false
-  });
-  
-  // Add  Labels
-  var labels = [
-    {x:-122.41914,y:37.76720,labeltext:'14, 49'},
-    {x:-122.42054,y:37.76620,labeltext:'14, 49'},
-    {x:-122.41608,y:37.76827,labeltext:'12'},
-    {x:-122.41485,y:37.76573,labeltext:'12'},
-    {x:-122.41606,y:37.76495,labeltext:'22, 33'},
-    {x:-122.41606,y:37.76565,labeltext:'22, 33'},
-    
-  ];
-  
-  function addLabel(labeloptions){
-    LatLng = new google.maps.LatLng(labeloptions.y, labeloptions.x);
-    
-    var label = new Label({
-      map: map,
-      text: labeloptions.labeltext,
-      position: LatLng
-    });
-  }
-  
-  
-  for(var i in labels){
-    addLabel(labels[i]);
-  }
 }
 
 function updateClock() {
-  var currentTime = new Date();
+  var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
-  var currentHours = currentTime.getHours();
-  var currentMinutes = currentTime.getMinutes();
-  var currentSeconds = currentTime.getSeconds();
+  var now = new Date();
+
+  var hours = now.getHours();
+  var minutes = now.getMinutes();
+  var seconds = now.getSeconds();
+  var day = days[ now.getDay() ];
+  var date = now.getDate();
+  var month = months[ now.getMonth() ];
 
   // Pad the minutes and seconds with leading zeros, if required
-  currentMinutes = ( currentMinutes < 10 ? "0" : "" ) + currentMinutes;
-  currentSeconds = ( currentSeconds < 10 ? "0" : "" ) + currentSeconds;
+  minutes = ( minutes < 10 ? '0' : '' ) + minutes;
+  seconds = ( seconds < 10 ? '0' : '' ) + seconds;
 
-  // Choose either "AM" or "PM" as appropriate
-  var timeOfDay = ( currentHours < 12 ) ? "AM" : "PM";
+  // Choose either 'AM' or 'PM' as appropriate
+  var timeOfDay = ( hours < 12 ) ? 'AM' : 'PM';
 
   // Convert the hours component to 12-hour format if needed
-  currentHours = ( currentHours > 12 ) ? currentHours - 12 : currentHours;
+  hours = ( hours > 12 ) ? hours - 12 : hours;
 
-  // Convert an hours component of "0" to "12"
-  currentHours = ( currentHours == 0 ) ? 12 : currentHours;
+  // Convert an hours component of '0' to '12'
+  hours = ( hours == 0 ) ? 12 : hours;
 
   // Compose the string for display
-  var currentTimeString = currentHours + ":" + currentMinutes + ":" + currentSeconds + " " + timeOfDay;
+  var timeString = hours + ':' + minutes + ':' + seconds + ' ' + timeOfDay;
+  var dateString = day + ', ' + month + ' ' + date;
 
   // Update the time display
-  $('#clock').html(currentTimeString);
+  $('#clock').html(timeString);
+  $('#date').html(dateString);
 }
 
 
@@ -449,19 +385,16 @@ $(document).ready(function(){
   setInterval(updateClock, 1000);
 
   //Get BART
-  getBART();
-  setInterval(getBART, 15000);
+  updateBART();
+  setInterval(updateBART, 15000);
   
   //Get MUNI
-  getMUNI()
-  setInterval(getMUNI, 15000);
+  updateMUNI()
+  setInterval(updateMUNI, 15000);
   
   //Get weather
-  getWeather();
-  setInterval(getWeather, 1200000);
-
-  //Launch Google Maps
-  launchMap();
+  updateWeather();
+  setInterval(updateWeather, 1200000);
   
   //Get BART service advisories
   getAdvisories();

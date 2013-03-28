@@ -1,137 +1,48 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-US">
 <head>
   <meta charset="utf-8">
-  <title>Transit Map</title>
-  <link rel="stylesheet" href="css/style.css" media="screen" />
-  <link href='http://fonts.googleapis.com/css?family=Lato:regular,900,900italic' rel='stylesheet' type='text/css'>
+  <title>Realtime Transit Display</title>
+  <meta name="robots" content="" />
+  <link href="css/style.css" media="screen" rel="stylesheet" type="text/css" />
+  <link href='http://fonts.googleapis.com/css?family=Roboto:400,300,500,700' rel='stylesheet' type='text/css'>
 </head>
 <body>
-  <div id="pageTitle">
-    <h1>Real Time Transit Departures</h1>
-    <div id="weather">
-      <div class="temp"></div>
-      <div class="forecast"></div>
+  <div id="main">
+    <header>
+      <div id="weatherContainer">
+        <div id="weather">
+          <div class="temp"></div>
+          <div class="forecast"></div>
+        </div>
+      </div>
+      <div id="time">
+        <div id="clock"></div>
+        <div id="date" class="slabtext"></div>
+      </div>
+    </header>
+    <div id="bart" class="grid-three">
+      <h2>BART Northbound</h2>
+      <div id="bart-north" class="bartContainer"></div>
+      <h2>BART Southbound</h2>
+      <div id="bart-south" class="bartContainer"></div>
     </div>
-    <div id="clock"></div>
-  </div>
-  <div id="transitContainer">
-    
-    <div id="advisories"></div>
-    
-    <div id="map_canvas"></div>
-    
-    <div id="transit_map"><img src="images/transit_map.jpg"></div>
-    
-    <div id="transitBoxContainer">
-    
-      <div id="bart" class="transitBox">
-        <div id="bartNorth">
-          <h3>BART Downtown/East Bay</h3>
-          <div class="departures"></div>
-        </div>
-        <div id="bartSouth">
-          <h3>BART South/Airport</h3>
-          <div class="departures"></div>
-        </div>
-      </div>  
-    
-      <div id="muni_north" class="muni transitBox">
-        <h3>MUNI Northbound</h3>
-        <div id="muni12_4668" class="departure">
-          <div class="colorbox">12</div>
-          <div class="destination">Folsom</div>
-          <div class="times"></div>
-        </div>
-        <div id="muni14_5551" class="departure">
-          <div class="colorbox">14</div>
-          <div class="destination">Mission</div>
-          <div class="times"></div>
-        </div>
-        <div id="muni14L_5551" class="departure">
-          <div class="colorbox">14L</div>
-          <div class="destination">Mission</div>
-          <div class="times"></div>
-        </div>
-        <div id="muni22_7289" class="departure">
-          <div class="colorbox">22</div>
-          <div class="destination">Church/Fillmore</div>
-          <div class="times"></div>
-        </div>
-        <div id="muni49_5551" class="departure">
-          <div class="colorbox">49</div>
-          <div class="destination">Van Ness</div>
-          <div class="times"></div>
-        </div>
-      </div>
-      <div id="muni_south" class="muni transitBox">
-        <h3>MUNI Southbound</h3>
-        <div id="muni12_4669" class="departure">
-          <div class="colorbox">12</div>
-          <div class="destination">Folsom</div>
-          <div class="times"></div>
-        </div>
-        <div id="muni14_5552" class="departure">
-          <div class="colorbox">14</div>
-          <div class="destination">Mission</div>
-          <div class="times"></div>
-        </div>
-        <div id="muni14L_5552" class="departure">
-          <div class="colorbox">14L</div>
-          <div class="destination">Mission</div>
-          <div class="times"></div>
-        </div>
-        <div id="muni49_5552" class="departure">
-          <div class="colorbox">49</div>
-          <div class="destination">Mission</div>
-          <div class="times"></div>
-        </div>
-      </div>
-      <div id="muni_east" class="muni transitBox">
-        <h3>MUNI Eastbound</h3>
-        <div id="muni22_3293" class="departure">
-          <div class="colorbox">22</div>
-          <div class="destination">16th St</div>
-          <div class="times"></div>
-        </div>
-        <div id="muni33_7289" class="departure">
-          <div class="colorbox">33</div>
-          <div class="destination">16th St</div>
-          <div class="times"></div>
-        </div>
-      </div>
-      <div id="muni_east" class="muni transitBox">
-        <h3>MUNI Westbound</h3>
-        <div id="muni33_3299" class="departure">
-          <div class="colorbox">33</div>
-          <div class="destination">18th St, Ashbury St</div>
-          <div class="times"></div>
-        </div>
-        <div id="muniN_6996" class="departure">
-          <div class="colorbox">N</div>
-          <div class="destination">Ocean Beach</div>
-          <div class="times"></div>
-        </div>
-        <div id="muniNOWL_5696" class="departure">
-          <div class="colorbox">N OWL</div>
-          <div class="destination">Ocean Beach</div>
-          <div class="times"></div>
-        </div>
-      </div>
-    
+    <div id="muni1" class="grid-three">
+      <h2>MUNI Northbound</h2>
+      <div id="muni-north" class="muniContainer"></div>
+      <h2>MUNI Westbound</h2>
+      <div id="muni-west" class="muniContainer"></div>
     </div>
-    
+    <div id="muni2" class="grid-three">
+      <h2>MUNI Southbound</h2>
+      <div id="muni-south" class="muniContainer"></div>
+      <h2>MUNI Eastbound</h2>
+      <div id="muni-east" class="muniContainer"></div>
+    </div>
   </div>
-  
-  <script src="http://www.google.com/jsapi?key=ABQIAAAA7ryB86mtzsqx_XU57t8PNhTMTGztSySO4_rR2h0VlHQYebwNHBQfKBMwuobg9gRDpM6rxsFgfXCnug"></script>
-
-  <script type="text/javascript">
-    google.load("maps", "3.x",{"other_params":"sensor=false"});
-    google.load("jquery", "1.6.1");
-  </script>
-  
-  <script src="js/jquery.timeago.js"></script>
+  <!--  <div id="clock"></div>-->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+      <script>window.jQuery || document.write('<script src="js/libs/jquery-1.9.1.min.js"><\/script>')</script>
   <script src="js/main.js"></script>
-  
 </body>
 </html>
