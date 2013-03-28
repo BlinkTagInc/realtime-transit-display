@@ -65,7 +65,6 @@ h3 {
   position: relative;
   margin: 0 3px;
 }
-
 .muni .rotate {
   width: 125px;
   height: 38px;
@@ -189,7 +188,7 @@ h3 {
 }
 #weather .temp {
   font-size: 48px;
-  display: inline-block;
+  float: left;
 }
 #weather .forecast {
   display: inline-block;
@@ -198,7 +197,7 @@ h3 {
 }
 #weather .forecast img {
   float: left;
-  margin: 0 8px 0 4px;
+  margin: 8px 12px 0 8px;
   width: 50px;
 }
 .rotate {

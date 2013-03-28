@@ -16,28 +16,28 @@ jQuery.fn.orderBy = function(keySelector)
 
 
 function updateWeather() {
-  //Get weather from Wunderground via YQL
-  $.getJSON('https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D%22http%3A%2F%2Fapi.wunderground.com%2Fweatherstation%2FWXCurrentObXML.asp%3FID%3DKCASANFR58%22&format=json&callback=?',function(data){
+  //Get weather from Wunderground
+  $.getJSON('http://api.wunderground.com/api/8b2761abe7bb24a1/conditions/q/CA/San_Francisco.json?callback=?',function(data){
     //Current conditions
-    var temp = Math.round(data.query.results.current_observation.temp_f);
+    var temp = Math.round(data.current_observation.temp_f);
     $('#weather .temp')
       .css('color', colorTemp(temp))
       .html(temp + '&deg;');
   });
-  $.getJSON('https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D%22http%3A%2F%2Fapi.wunderground.com%2Fauto%2Fwui%2Fgeo%2FForecastXML%2Findex.xml%3Fquery%3D94103%22&format=json&callback=?',function(data){
+  $.getJSON('http://api.wunderground.com/api/8b2761abe7bb24a1/forecast/q/CA/San_Francisco.json?callback=?',function(data){
     //Forecast
-    var forecast = data.query.results.forecast.simpleforecast.forecastday[0];
+    var forecast = data.forecast.simpleforecast.forecastday[0];
     $('#weather .forecast').html(
       '<img src="http://icons-ak.wxug.com/i/c/a/' + forecast.icon + '.gif" class="weathericon">' +
       forecast.conditions + 
-      '<br>Range: <span style="color:' + colorTemp(forecast.low.fahrenheit) + ';">' + forecast.low.fahrenheit + '&deg;F</span>' + 
-      ' - <span style="color:' + colorTemp(forecast.high.fahrenheit) + ';">' + forecast.high.fahrenheit + '&deg;F' + '</span>' +
+      '<br>High: <span style="color:' + colorTemp(forecast.high.fahrenheit) + ';">' + forecast.high.fahrenheit + '&deg;F</span>' + 
+      '<br>Low: <span style="color:' + colorTemp(forecast.low.fahrenheit) + ';">' + forecast.low.fahrenheit + '&deg;F' + '</span>' +
       '<br>Precip: ' + forecast.pop + '%'
     );
   });
 
   function colorTemp(temp) {
-    var color = Math.round( 255 - Math.abs(temp - 65) * (255 / 65) );
+    var color = Math.min(Math.round( 255 - Math.abs(temp - 65) * (255 / 30) ), 255);
     if(temp > 65) {
       //its hot
       return 'rgb(255,' + color + ',' + color + ')';
@@ -171,7 +171,7 @@ function updateMUNI(){
       route: 12,
       stop:4668,
       direction: 'north',
-      destination: 'Folsom to Downtown'
+      destination: 'Folsom to Downtown and North Beach'
     },
     {
       route: 12,
@@ -196,7 +196,7 @@ function updateMUNI(){
       route: 14,
       stop:5551,
       direction: 'north',
-      destination: 'Mission to Transbay Terminal'
+      destination: 'Mission to Transbay & Ferry Building'
     },
     {
       route: 14,
@@ -226,19 +226,19 @@ function updateMUNI(){
       route: 22,
       stop:3299,
       direction: 'east',
-      destination: '16th to Potrero Hill'
+      destination: '16th St to Potrero Hill & Dogpatch'
     },
     {
       route: 33,
       stop:7289,
       direction: 'west',
-      destination: '18th to the Haight & Richmond'
+      destination: '18th to the Haight & the Richmond'
     },
     {
       route: 33,
       stop:3299,
-      direction: 'east',
-      destination: '16th to Potrero Hill and Transbay Term.'
+      direction: 'south',
+      destination: 'Potrero to 25th St'
     }
   ];
   
@@ -394,7 +394,7 @@ $(document).ready(function(){
   
   //Get weather
   updateWeather();
-  setInterval(updateWeather, 1200000);
+  setInterval(updateWeather, 600000);
   
   //Get BART service advisories
   getAdvisories();

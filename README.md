@@ -9,7 +9,7 @@ You can see the Realtime Transit Display in use at [transit.bn.ee](http://transi
 
 ### APIs ###
 
-* [Google Maps](http://maps.google.com)
+* [Weather Underground](http://api.wunderground.com)
 * [BART API](http://api.bart.gov)
 * [NextMUNI API](http://www.sfmta.com/cms/asite/nextmunidata.htm)
 
