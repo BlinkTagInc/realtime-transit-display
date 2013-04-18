@@ -1,30 +1,29 @@
 var bartAPIKey = 'MW9S-E7SL-26DU-VV8V';
 
-jQuery.fn.orderBy = function(keySelector)
-{
-    return this.sort(function(a,b)
-    {
-        a = keySelector.apply(a);
-        b = keySelector.apply(b);
-        if (a > b)
-            return 1;
-        if (a < b)
-            return -1;
-        return 0;
-    });
+jQuery.fn.orderBy = function(keySelector) {
+  return this.sort(function(a,b) {
+    a = keySelector.apply(a);
+    b = keySelector.apply(b);
+    if (a > b)
+      return 1;
+    if (a < b)
+      return -1;
+    return 0;
+  });
 };
 
 
 function updateWeather() {
   //Get weather from Wunderground
-  $.getJSON('http://api.wunderground.com/api/8b2761abe7bb24a1/conditions/q/CA/San_Francisco.json?callback=?',function(data){
+  var weatherundergroundAPIKey = '8b2761abe7bb24a1';
+  $.getJSON('http://api.wunderground.com/api/' + weatherundergroundAPIKey + '/conditions/q/CA/San_Francisco.json?callback=?',function(data){
     //Current conditions
     var temp = Math.round(data.current_observation.temp_f);
     $('#weather .temp')
       .css('color', colorTemp(temp))
       .html(temp + '&deg;');
   });
-  $.getJSON('http://api.wunderground.com/api/8b2761abe7bb24a1/forecast/q/CA/San_Francisco.json?callback=?',function(data){
+  $.getJSON('http://api.wunderground.com/api/' + weatherundergroundAPIKey + '/forecast/q/CA/San_Francisco.json?callback=?',function(data){
     //Forecast
     var forecast = data.forecast.simpleforecast.forecastday[0];
     $('#weather .forecast').html(
@@ -392,9 +391,9 @@ $(document).ready(function(){
   updateMUNI()
   setInterval(updateMUNI, 15000);
   
-  //Get weather
+  //Get weather every 20 minutes
   updateWeather();
-  setInterval(updateWeather, 600000);
+  setInterval(updateWeather, 1200000);
   
   //Get BART service advisories
   getAdvisories();
