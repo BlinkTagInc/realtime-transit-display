@@ -14,7 +14,6 @@ module.exports = function routes(app){
     
 
     function getConditions(cb) {
-      console.log(app.set('wundergroundToken'))
       request.get({
           url: 'http://api.wunderground.com/api/' + app.set('wundergroundToken') + '/conditions/q/CA/San_Francisco.json'
         , json: true

@@ -15,7 +15,6 @@ jQuery.fn.orderBy = function(keySelector) {
 
 function updateWeather() {
   $.getJSON('/api/weather.json', function(data){
-    console.log(data)
     //Current conditions
     var temp = Math.round(data[0].current_observation.temp_f);
     $('#weather .temp')

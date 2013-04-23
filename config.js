@@ -36,10 +36,13 @@ module.exports = function(app){
   app.configure(function() {
     try {
       var keys = require('./keys');
-      app.set('wundergroundToken', process.env.WUNDERGROUND_TOKEN || keys.wundergroundToken);
-    } catch(e) { 
-      console.error('Add keys to keys.js or set ENV variables');
+      app.set('wundergroundToken', keys.wundergroundToken);
+    } catch(e) {
+      if(process.env.WUNDERGROUND_TOKEN) {
+        app.set('wundergroundToken', process.env.WUNDERGROUND_TOKEN);
+      } else {
+        console.error('Add tokens to keys.js or set ENV variables');
+      } 
     }
-    
   })
 }
