@@ -14,18 +14,16 @@ jQuery.fn.orderBy = function(keySelector) {
 
 
 function updateWeather() {
-  //Get weather from Wunderground
-  var weatherundergroundAPIKey = '8b2761abe7bb24a1';
-  $.getJSON('http://api.wunderground.com/api/' + weatherundergroundAPIKey + '/conditions/q/CA/San_Francisco.json?callback=?',function(data){
+  $.getJSON('/api/weather.json', function(data){
+    console.log(data)
     //Current conditions
-    var temp = Math.round(data.current_observation.temp_f);
+    var temp = Math.round(data[0].current_observation.temp_f);
     $('#weather .temp')
       .css('color', colorTemp(temp))
       .html(temp + '&deg;');
-  });
-  $.getJSON('http://api.wunderground.com/api/' + weatherundergroundAPIKey + '/forecast/q/CA/San_Francisco.json?callback=?',function(data){
+
     //Forecast
-    var forecast = data.forecast.simpleforecast.forecastday[0];
+    var forecast = data[1].forecast.simpleforecast.forecastday[0];
     $('#weather .forecast').html(
       '<img src="http://icons-ak.wxug.com/i/c/a/' + forecast.icon + '.gif" class="weathericon">' +
       forecast.conditions + 

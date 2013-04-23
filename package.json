@@ -1,0 +1,18 @@
+{
+  "name": "realtime-transit-display",
+  "author": "Brendan Nee <me@bn.ee>",
+  "version": "0.0.2",
+  "dependencies": {
+      "express": "= 3.2.x"
+    , "connect": "= 2.7.x"
+    , "async": "= 0.2.x"
+    , "underscore": "= 1.4.x"
+    , "moment": "= 2.0.x"
+    , "request": "= 2.16.x"
+  },
+  "main": "index",
+  "engines": {
+    "node": "0.10.x",
+    "npm": "1.2.x"
+  }
+}
