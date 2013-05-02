@@ -14,6 +14,10 @@ module.exports = function routes(app){
     
 
     function getConditions(cb) {
+      if(!app.set('wundergroundToken')) { 
+        console.error('No Wunderground Token defined.');
+        res.json({});
+      }
       request.get({
           url: 'http://api.wunderground.com/api/' + app.set('wundergroundToken') + '/conditions/q/CA/San_Francisco.json'
         , json: true
@@ -23,6 +27,10 @@ module.exports = function routes(app){
     }
 
     function getForecast(cb) {
+      if(!app.set('wundergroundToken')) { 
+        console.error('No Wunderground Token defined.');
+        res.json({});
+      }
       request.get({
           url: 'http://api.wunderground.com/api/' + app.set('wundergroundToken') + '/forecast/q/CA/San_Francisco.json'
         , json: true

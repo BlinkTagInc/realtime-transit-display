@@ -1,6 +1,13 @@
 var express = require('express')
   , connect = require('connect');
 
+
+try {
+  var keys = require('./keys');
+} catch(e) {
+  var keys = {};
+}
+
 module.exports = function(app){
   app.configure(function(){
     this
@@ -34,15 +41,7 @@ module.exports = function(app){
   });
 
   app.configure(function() {
-    try {
-      var keys = require('./keys');
-      app.set('wundergroundToken', keys.wundergroundToken);
-    } catch(e) {
-      if(process.env.WUNDERGROUND_TOKEN) {
-        app.set('wundergroundToken', process.env.WUNDERGROUND_TOKEN);
-      } else {
-        console.error('Add tokens to keys.js or set ENV variables');
-      } 
-    }
+    var wundergroundToken = process.env.WUNDERGROUND_TOKEN || keys.wundergroundToken;
+    app.set('wundergroundToken', wundergroundToken);
   })
 }
