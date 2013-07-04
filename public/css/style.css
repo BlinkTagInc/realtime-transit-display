@@ -110,7 +110,7 @@ h3 {
 .laterbuses .time:first-child {
   border-bottom: 3px solid #2f363c;
 }
-#bart .advisories {
+#bart .advisories .advisory {
   font-size: 24px;
   font-weight: bold;
   background-color: #b94a48;
