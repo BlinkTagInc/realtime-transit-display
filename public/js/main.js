@@ -44,15 +44,16 @@ function updateWeather() {
   }
 }
 
-
 function updateBART(){
-  var url = 'http://api.bart.gov/api/etd.aspx';
-  
+  updateBARTDepartures();
+  updateBARTAdvisories();
+}
+
+function updateBARTDepartures(){
   var bart = [];
 
-  //Request Northbound Departures
   $.ajax({
-    url: url,
+    url: 'http://api.bart.gov/api/etd.aspx',
     data: {
       cmd: 'etd',
       orig: '16TH',
@@ -135,14 +136,9 @@ function updateBART(){
   }
 }
 
-function getAdvisories(){
-  var url = 'http://api.bart.gov/api/etd.aspx';
-
-  var bart = [];
-
-  //Request Northbound Departures
+function updateBARTAdvisories(){
   $.ajax({
-    url: url,
+    url: 'http://api.bart.gov/api/bsa.aspx',
     data: {
       cmd: 'bsa',
       orig: '16TH',
@@ -150,14 +146,17 @@ function getAdvisories(){
     },
     dataType: 'xml',
     success:function(result){
-      $('#advisories').empty();
+      $('#bart .advisories').empty();
       $(result).find('bsa').each(function(i, data){
-        //Process alert
-        $('#advisories').append('<div>Alert: ' + data.description + '<br>' + data.posted + '</div>');
+        //Process advisories
+       $('<div>')
+        .addClass('advisory')
+        .text($(data).find('description').text())
+        .appendTo('#bart .advisories');
       });
     }
   });
-}
+};
 
 
 function updateMUNI(){
