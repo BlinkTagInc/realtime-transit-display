@@ -391,10 +391,6 @@ $(document).ready(function(){
   updateWeather();
   setInterval(updateWeather, 1200000);
   
-  //Get BART service advisories
-  getAdvisories();
-  setInterval(getAdvisories, 60000);
-  
   //Resize transit if needed
   resizeDepartures();
   setInterval(resizeDepartures, 1000);
