@@ -149,10 +149,13 @@ function updateBARTAdvisories(){
       $('#bart .advisories').empty();
       $(result).find('bsa').each(function(i, data){
         //Process advisories
-       $('<div>')
-        .addClass('advisory')
-        .text($(data).find('description').text())
-        .appendTo('#bart .advisories');
+        var description = $(data).find('description').text();
+        if(description != 'No delays reported.') {
+          $('<div>')
+            .addClass('advisory')
+            .text(description)
+            .appendTo('#bart .advisories');
+        }
       });
     }
   });
