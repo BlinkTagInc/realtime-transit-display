@@ -1,23 +1,40 @@
-Realtime-Transit-Display
-=========
+# Realtime-Transit-Display
 
 A realtime transit display meant for a kiosk with no user interaction.  It shows realtime arrivals of MUNI and BART transit vehicles for nearby stations, current time and weather.
 
-### Example ###
+## Example
 
 You can see the Realtime Transit Display in use at [transit.bn.ee](http://transit.bn.ee)
 
-### APIs ###
+## Running
+
+Get node.js and npm.
+
+Install required modules
+
+    npm install
+
+Copy `keys-sample.js` to `keys.js`
+
+    cp keys-sample.js keys.js
+
+Add your [wunderground token](http://www.wunderground.com/weather/api/) to `keys.js`.
+
+Run the app
+
+    node index.js
+
+## APIs
 
 * [Weather Underground](http://api.wunderground.com)
 * [BART API](http://api.bart.gov)
 * [NextMUNI API](http://www.sfmta.com/cms/asite/nextmunidata.htm)
 
-### Credits ###
+## Credits
 
 Brendan Nee me@bn.ee
 
-### License ###
+## License
 
 (The MIT License)
 
