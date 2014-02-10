@@ -4,6 +4,7 @@
   "version": "0.0.3",
   "dependencies": {
       "express": "= 3.4.x"
+    , "connect": "= 2.12.x"
     , "async": "= 0.2.x"
     , "underscore": "= 1.5.x"
     , "moment": "= 2.5.x"
