@@ -25,8 +25,8 @@ function updateWeather() {
     var forecast = data[1].forecast.simpleforecast.forecastday[0];
     $('#weather .forecast').html(
       '<img src="http://icons-ak.wxug.com/i/c/a/' + forecast.icon + '.gif" class="weathericon">' +
-      forecast.conditions + 
-      '<br>High: <span style="color:' + colorTemp(forecast.high.fahrenheit) + ';">' + forecast.high.fahrenheit + '&deg;F</span>' + 
+      forecast.conditions +
+      '<br>High: <span style="color:' + colorTemp(forecast.high.fahrenheit) + ';">' + forecast.high.fahrenheit + '&deg;F</span>' +
       '<br>Low: <span style="color:' + colorTemp(forecast.low.fahrenheit) + ';">' + forecast.low.fahrenheit + '&deg;F' + '</span>' +
       '<br>Precip: ' + forecast.pop + '%'
     );
@@ -62,7 +62,7 @@ function updateBARTDepartures(){
     dataType: 'xml',
     success:function(result){
       $('#bart-north, #bart-south').empty();
-      
+
       $(result).find('etd').each(function(i, data){
         //Process directions
         departure = addDirection(data);
@@ -70,26 +70,26 @@ function updateBARTDepartures(){
           bart.push(departure);
         }
       });
-      
+
       //Sort departures
       bart.sort(bartSortHandler);
-      
+
       bart.forEach(function(departure){
         $(departure.div).appendTo( (departure.direction == 'North') ? $('#bart-north') : $('#bart-south'));
       });
     }
   });
-  
+
   function addDirection(data){
     var departure = {
       destination: $(data).find('destination').text(),
       times: []
     };
-    
+
     if(departure.destination == 'Dublin/Pleasanton') {
       departure.destination = 'Dublin/ Pleasanton';
     }
-    
+
     $(data).find('estimate').each(function(j, data){
       //Only add times where minutes are less than 100
       if($(data).find('minutes').text() < 100){
@@ -101,7 +101,7 @@ function updateBARTDepartures(){
         departure.direction = $(data).find('direction').text();
       }
     });
-    
+
     departure.div = $('<div>')
       .addClass('bart')
       .append($('<div>')
@@ -126,11 +126,11 @@ function updateBARTDepartures(){
         $($('.laterbuses .time', departure.div).get((idx - 1))).html(time);
       }
     })
-    
+
     //Check if first time is less than 40 minutes away. If not, discard entire destination
     return (departure.times[0] < 40) ? departure : false;
   }
-    
+
   function bartSortHandler(a, b){
     return (a.times[0] - b.times[0]);
   }
@@ -239,7 +239,7 @@ function updateMUNI(){
       destination: 'Potrero to 25th St'
     }
   ];
-  
+
   var url = 'http://webservices.nextbus.com/service/publicXMLFeed',
       callbackCount = 0;
 
@@ -285,7 +285,7 @@ function updateMUNI(){
               .addClass('time'))
             .append($('<div>')
               .addClass('time')));
-        
+
         var idx = 0;
         predictions.each(function(i, data){
           //Limit to 3 results, only show times less than 100, don't show results that are 0
@@ -356,7 +356,7 @@ function resizeDepartures(){
   //Set #transitBox font-size to 100%;
   $('#transitBoxContainer').css('font-size','100%');
   var currentHeight = $('#transitBoxContainer').height();
-  
+
   if(currentHeight > visibleHeight){
     //Calculate percent to scale
     var percent = Math.ceil((1 - ((currentHeight - visibleHeight) / currentHeight)) * 100);
@@ -374,7 +374,7 @@ $(document).ready(function(){
   if(screen.colorDepth < 24) {
     $('body').addClass('noGradients');
   }
-  
+
   //Resize Window
   resizeWindow();
   $(window).bind("resize", resizeWindow);
@@ -385,20 +385,20 @@ $(document).ready(function(){
   //Get BART
   updateBART();
   setInterval(updateBART, 15000);
-  
+
   //Get MUNI
   updateMUNI()
   setInterval(updateMUNI, 15000);
-  
-  //Get weather every 20 minutes
+
+  //Get weather every hour
   updateWeather();
-  setInterval(updateWeather, 1200000);
-  
+  setInterval(updateWeather, 3600000);
+
   //Resize transit if needed
   resizeDepartures();
   setInterval(resizeDepartures, 1000);
 
   //reload browser every 6 hours
   setInterval(reloadPage, 21600000);
-  
+
 });
