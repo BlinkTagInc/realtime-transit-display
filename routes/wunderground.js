@@ -5,16 +5,16 @@ var nconf = require('nconf');
 var router = express.Router();
 
 router.get('/', function(req, res){
+  if(!nconf.get('WUNDERGROUND_TOKEN')) {
+    console.error('No Wunderground Token defined.');
+    res.json({});
+  }
+
   async.parallel([getConditions, getForecast], function(e, data) {
     res.json(data);
-  })
-
+  });
 
   function getConditions(cb) {
-    if(!nconf.get('WUNDERGROUND_TOKEN')) {
-      console.error('No Wunderground Token defined.');
-      res.json({});
-    }
     request.get({
         url: 'http://api.wunderground.com/api/' + nconf.get('WUNDERGROUND_TOKEN') + '/conditions/q/CA/San_Francisco.json'
       , json: true
@@ -24,10 +24,6 @@ router.get('/', function(req, res){
   }
 
   function getForecast(cb) {
-    if(!nconf.get('WUNDERGROUND_TOKEN')) {
-      console.error('No Wunderground Token defined.');
-      res.json({});
-    }
     request.get({
         url: 'http://api.wunderground.com/api/' + nconf.get('WUNDERGROUND_TOKEN') + '/forecast/q/CA/San_Francisco.json'
       , json: true

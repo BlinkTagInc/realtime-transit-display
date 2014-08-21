@@ -311,14 +311,15 @@ function updateMUNI(){
 function updateUber() {
   $.getJSON('/api/uber', function(data) {
     $('.uberContainer .col1, .uberContainer .col2').empty();
-    
-    if(data && data.times) {
-      data.times.forEach(function(service, idx) {
+
+    if(data && data[0] && data[0].times) {
+      data[0].times.forEach(function(service, idx) {
         var div = $('<div>')
           .addClass('uber')
+          .attr('id', service.product_id)
           .append($('<div>')
             .addClass('serviceName')
-            .text(service.localized_display_name))
+            .text(service.display_name))
           .append($('<div>')
             .addClass('time')
             .text(Math.round(service.estimate / 60)));
@@ -329,7 +330,17 @@ function updateUber() {
         }
       });
     }
-    console.log(data);
+    if(data && data[1] && data[1].prices) {
+      data[1].prices.forEach(function(price, idx) {
+        if(price.surge_multiplier > 1) {
+          var html = price.display_name + ' <span>(' + price.surge_multiplier + 'x)</span>';
+          $('#' + price.product_id)
+            .addClass('surge')
+            .find('.serviceName')
+              .html(html);
+        }
+      });
+    }
   });
 }
 
