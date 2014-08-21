@@ -49,11 +49,13 @@ h3 {
   text-transform: uppercase;
 }
 .muniContainer,
-.bartContainer {
+.bartContainer,
+.uberContainer {
   overflow: hidden;
 }
 .muni,
-.bart {
+.bart,
+.uber {
   float: left;
   clear: both;
   margin: 2px 0 0 30px;
@@ -168,6 +170,38 @@ h3 {
 #muni33_7289 .busnumber {
   background: #b4304f;
 }
+
+#uber .col1,
+#uber .col2 {
+  float: left;
+  width: 49%;
+}
+
+.uber {
+  font-size: 18px;
+  background: rgba(0, 0, 0, 0.1);
+  height: 40px;
+  border-bottom: 3px solid #2f363c;
+}
+
+.uber .serviceName {
+  width: 100px;
+  display: inline-block;
+  line-height: 40px;
+  height: 40px;
+  padding-left: 5px;
+  border-right: 3px solid #2f363c;
+}
+
+.uber .time {
+  width: 63px;
+  text-align: center;
+  display: inline-block;
+  line-height: 40px;
+  font-size: 20px;
+  height: 40px;
+}
+
 #time {
   margin-left: 30px;
   background: rgba(0,0,0,0.1);

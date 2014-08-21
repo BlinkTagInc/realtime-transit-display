@@ -14,7 +14,7 @@ jQuery.fn.orderBy = function(keySelector) {
 
 
 function updateWeather() {
-  $.getJSON('/api/weather.json', function(data){
+  $.getJSON('/api/weather', function(data){
     //Current conditions
     var temp = Math.round(data[0].current_observation.temp_f);
     $('#weather .temp')
@@ -308,6 +308,31 @@ function updateMUNI(){
   });
 }
 
+function updateUber() {
+  $.getJSON('/api/uber', function(data) {
+    $('.uberContainer .col1, .uberContainer .col2').empty();
+    
+    if(data && data.times) {
+      data.times.forEach(function(service, idx) {
+        var div = $('<div>')
+          .addClass('uber')
+          .append($('<div>')
+            .addClass('serviceName')
+            .text(service.localized_display_name))
+          .append($('<div>')
+            .addClass('time')
+            .text(Math.round(service.estimate / 60)));
+        if(idx < 2) {
+          div.appendTo('.uberContainer .col1');
+        } else {
+          div.appendTo('.uberContainer .col2');
+        }
+      });
+    }
+    console.log(data);
+  });
+}
+
 function updateClock() {
   var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -389,6 +414,10 @@ $(document).ready(function(){
   //Get MUNI
   updateMUNI()
   setInterval(updateMUNI, 15000);
+
+  //Get Uber
+  updateUber();
+  setInterval(updateUber, 60000);
 
   //Get weather every hour
   updateWeather();

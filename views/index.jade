@@ -1,0 +1,36 @@
+extends layout
+
+block content
+
+  #main
+    header
+      #weatherContainer
+        #weather
+          .temp
+          .forecast
+      #time
+        #clock
+        #date.slabtext
+    #bart.grid-three
+      h2 Uber
+      #uber.uberContainer
+        .col1
+        .col2
+      .advisories
+      h2 BART Northbound
+      #bart-north.bartContainer
+      h2 BART Southbound
+      #bart-south.bartContainer
+    #muni1.grid-three
+      h2 MUNI Northbound
+      #muni-north.muniContainer
+      h2 MUNI Westbound
+      #muni-west.muniContainer
+    #muni2.grid-three
+      h2 MUNI Southbound
+      #muni-south.muniContainer
+      h2 MUNI Eastbound
+      #muni-east.muniContainer
+
+  script(src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js")
+  script(src="javascripts/main.js")

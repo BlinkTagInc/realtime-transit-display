@@ -1,6 +1,6 @@
 # Realtime-Transit-Display
 
-A realtime transit display meant for a kiosk with no user interaction.  It shows realtime arrivals of MUNI and BART transit vehicles for nearby stations, current time and weather.
+A realtime transit display meant for a kiosk with no user interaction.  It shows realtime arrivals of MUNI and BART transit vehicles for nearby stations, Uber wait times and weather.
 
 ## Example
 
@@ -14,11 +14,11 @@ Install required modules
 
     npm install
 
-Copy `keys-sample.js` to `keys.js`
+Copy `config-sample.json` to `config.json`
 
-    cp keys-sample.js keys.js
+    cp config-sample.json config.json
 
-Add your [wunderground token](http://www.wunderground.com/weather/api/) to `keys.js`.
+Add your [wunderground token](http://www.wunderground.com/weather/api/) and [Uber Token](https://developer.uber.com) to `keys.js`.
 
 Run the app
 
@@ -29,6 +29,7 @@ Run the app
 * [Weather Underground](http://api.wunderground.com)
 * [BART API](http://api.bart.gov)
 * [NextMUNI API](http://www.sfmta.com/cms/asite/nextmunidata.htm)
+* [Uber API](https://developer.uber.com)
 
 ## Credits
 
