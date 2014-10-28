@@ -4,7 +4,7 @@ A realtime transit display meant for a kiosk with no user interaction.  It shows
 
 ## Example
 
-You can see the Realtime Transit Display in use at [transit.bn.ee](http://transit.bn.ee)
+You can see the Realtime Transit Display in use at [transit.bn.ee](http://transit.bn.ee).  A raspberry pi can be used to power the display, [see this post](http://blog.bn.ee/2013/01/11/building-a-real-time-transit-information-kiosk-with-raspberry-pi/).
 
 ## Running
 
@@ -39,7 +39,7 @@ Brendan Nee me@bn.ee
 
 (The MIT License)
 
-Copyright (c) 2013 Brendan Nee &lt;me@bn.ee&gt;
+Copyright (c) 2014 Brendan Nee &lt;me@bn.ee&gt;
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
