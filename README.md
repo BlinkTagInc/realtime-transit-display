@@ -18,7 +18,7 @@ Copy `config-sample.json` to `config.json`
 
     cp config-sample.json config.json
 
-Add your [wunderground token](http://www.wunderground.com/weather/api/) and [Uber Token](https://developer.uber.com) to `keys.js`.
+Add your [wunderground token](http://www.wunderground.com/weather/api/) and [Uber Token](https://developer.uber.com) to `config.json`.
 
 Run the app
 
