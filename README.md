@@ -2,29 +2,34 @@
 
 A realtime transit display meant for a kiosk with no user interaction.  It shows realtime arrivals of MUNI and BART transit vehicles for nearby stations, Uber wait times and weather.
 
+![realtime-transit-screenshot](https://cloud.githubusercontent.com/assets/96217/4850393/82544c50-6069-11e4-8a2b-a818d29e009b.png)
+
 ## Example
 
 You can see the Realtime Transit Display in use at [transit.bn.ee](http://transit.bn.ee).  A raspberry pi can be used to power the display, [see this post](http://blog.bn.ee/2013/01/11/building-a-real-time-transit-information-kiosk-with-raspberry-pi/).
 
 ## Running
 
-* Get node.js and npm.
+#### Get node.js and npm.
 
-* Install required modules
+#### Install required modules
 
     npm install
 
-* Copy `config-sample.json` to `config.json`
+#### Copy `config-sample.json` to `config.json`
 
     cp config-sample.json config.json
 
-* Add your [wunderground token](http://www.wunderground.com/weather/api/) and [Uber Token](https://developer.uber.com) to `config.json`.
+#### Add your API tokens
 
-* Run the app
+Add your [wunderground token](http://www.wunderground.com/weather/api/) and [Uber Token](https://developer.uber.com) to `config.json`.
+
+#### Run the app
 
     npm start
 
-* View the site locally [http://localhost:3000](http://localhost:3000) in your browser.
+#### View the site locally
+Visit [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## APIs
 
