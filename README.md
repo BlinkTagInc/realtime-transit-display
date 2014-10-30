@@ -8,21 +8,23 @@ You can see the Realtime Transit Display in use at [transit.bn.ee](http://transi
 
 ## Running
 
-Get node.js and npm.
+* Get node.js and npm.
 
-Install required modules
+* Install required modules
 
     npm install
 
-Copy `config-sample.json` to `config.json`
+* Copy `config-sample.json` to `config.json`
 
     cp config-sample.json config.json
 
-Add your [wunderground token](http://www.wunderground.com/weather/api/) and [Uber Token](https://developer.uber.com) to `config.json`.
+* Add your [wunderground token](http://www.wunderground.com/weather/api/) and [Uber Token](https://developer.uber.com) to `config.json`.
 
-Run the app
+* Run the app
 
-    node index.js
+    npm start
+
+* View the site locally [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## APIs
 
