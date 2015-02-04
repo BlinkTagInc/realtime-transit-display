@@ -30,7 +30,7 @@ Add your wunderground token and Uber Token to config.js.
 
 ### Run the app
 
-    node index.js
+    npm start
 
 ## Raspberry Pi Setup
 To setup a raspberry pi as a kiosk, [see this
@@ -132,7 +132,7 @@ After any reboots you will need to restart the application and Chromium.  The ea
 
 ## Editing the display layout
 
-Selecting your local BART station and the local Muni routes are all detailed in `main.js` located inside `/public/javascripts/`  
+Selecting your local BART station and the local Muni routes are all detailed in `main.js` located inside `/public/javascripts/`
 
 Four letter BART Station codes are available [here](http://api.bart.gov/docs/overview/abbrev.aspx).
 
