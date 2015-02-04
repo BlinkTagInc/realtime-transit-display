@@ -139,7 +139,7 @@ Four letter BART Station codes are available [here](http://api.bart.gov/docs/ove
 ## APIs
 * [Weather Underground](http://api.wunderground.com)
 * [BART API](http://api.bart.gov)
-* [NextMUNI API](http://www.sfmta.com/cms/asite/nextmunidata.htm)
+* [NextMUNI API](http://api-portal.anypoint.mulesoft.com/nextbus/api/nextbus-api/docs/reference)
 * [Uber API](https://developer.uber.com)
 
 ## Credits
