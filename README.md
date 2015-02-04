@@ -137,7 +137,7 @@ Selecting your local BART station and the local Muni routes are all detailed in 
 Four letter BART Station codes are available [here](http://api.bart.gov/docs/overview/abbrev.aspx).
 
 ## APIs
-* [Weather Underground](http://api.wunderground.com)
+* [Weather Underground](http://www.wunderground.com/weather/api/d/docs)
 * [BART API](http://api.bart.gov)
 * [NextMUNI API](http://api-portal.anypoint.mulesoft.com/nextbus/api/nextbus-api/docs/reference)
 * [Uber API](https://developer.uber.com)
