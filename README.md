@@ -30,7 +30,7 @@ Add your wunderground token and Uber Token to config.js.
 
 ### Run the app
 
-    node index.js
+    npm start
 
 ## Raspberry Pi Setup
 To setup a raspberry pi as a kiosk, [see this
@@ -132,14 +132,14 @@ After any reboots you will need to restart the application and Chromium.  The ea
 
 ## Editing the display layout
 
-Selecting your local BART station and the local Muni routes are all detailed in `main.js` located inside `/public/javascripts/`  
+Selecting your local BART station and the local Muni routes are all detailed in `main.js` located inside `/public/javascripts/`
 
 Four letter BART Station codes are available [here](http://api.bart.gov/docs/overview/abbrev.aspx).
 
 ## APIs
-* [Weather Underground](http://api.wunderground.com)
+* [Weather Underground](http://www.wunderground.com/weather/api/d/docs)
 * [BART API](http://api.bart.gov)
-* [NextMUNI API](http://www.sfmta.com/cms/asite/nextmunidata.htm)
+* [NextMUNI API](http://api-portal.anypoint.mulesoft.com/nextbus/api/nextbus-api/docs/reference)
 * [Uber API](https://developer.uber.com)
 
 ## Credits
