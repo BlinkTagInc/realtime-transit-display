@@ -323,7 +323,7 @@ function updateUber() {
           .append($('<div>')
             .addClass('time')
             .text(Math.round(service.estimate / 60)));
-        if(idx < 2) {
+        if(idx < Math.ceil(data[0].times.length / 2)) {
           div.appendTo('.uberContainer .col1');
         } else {
           div.appendTo('.uberContainer .col2');
