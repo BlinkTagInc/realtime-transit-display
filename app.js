@@ -8,6 +8,7 @@ var nconf = require('nconf');
 var routes = require('./routes/index');
 var uber = require('./routes/uber');
 var wunderground = require('./routes/wunderground');
+var twitter = require('./routes/twitter');
 
 var app = express();
 
@@ -27,6 +28,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/api/uber', uber);
 app.use('/api/weather', wunderground);
+app.use('/api/twitter', twitter);
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {

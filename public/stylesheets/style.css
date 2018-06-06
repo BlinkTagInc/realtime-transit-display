@@ -14,11 +14,14 @@ header {
   overflow: hidden;
 }
 
+.clear {
+  clear: both;
+}
+
 #main {
   height: 100%;
 }
 #main .grid-three {
-  width: 33.333%;
   min-width: 415px;
   float: left;
   min-height: 20px;
@@ -29,18 +32,21 @@ header {
 }
 #main .grid-three:nth-of-type(1) {
   border-top: 3px solid rgb(222, 0, 255);
+  width: 30%;
 }
 #main .grid-three:nth-of-type(2) {
   border-top: 3px solid rgb(0, 255, 36);
+  width: 40%;
 }
 #main .grid-three:nth-of-type(3) {
   border-top: 3px solid rgb(0, 180, 255);
+  width: 30%;
+  height: 100%;
 }
 h2 {
   text-transform: uppercase;
   margin: 20px 0 0 30px;
   background: rgba(0, 0, 0, 0.1);
-  width: 381px;
   padding: 0 4px;
   box-sizing: border-box;
   letter-spacing: 1px;
@@ -61,53 +67,54 @@ h3 {
   margin: 2px 0 0 30px;
 }
 .muni .destinationContainer {
-  width: 38px;
-  height: 125px;
+  width: 45px;
+  height: 75px;
   float: left;
   position: relative;
   margin: 0 3px;
 }
 .muni .rotate {
-  width: 125px;
-  height: 38px;
+  width: 75px;
+  height: 45px;
   font-size: 12px;
   padding: 2px;
   box-sizing: border-box;
   background: rgba(0, 0, 0, 0.1);
   position: absolute;
   bottom: 0;
+  right: -38px;
   text-align: center;
 }
 .busnumber {
-  font-size: 60px;
+  font-size: 40px;
   float: left;
-  height: 125px;
-  width: 125px;
+  height: 75px;
+  width: 75px;
   text-align: center;
-  line-height: 125px;
+  line-height: 75px;
 }
 .nextbus {
-  font-size: 75px;
+  font-size: 60px;
   float: left;
-  height: 125px;
-  line-height: 125px;
-  width: 150px;
+  height: 75px;
+  line-height: 75px;
+  width: 110px;
   text-align: center;
   background: rgba(0,0,0,0.1);
 }
 .laterbuses {
   float: left;
-  height: 125px;
+  height: 75px;
   margin-left: 2px;
   background: rgba(0,0,0,0.1);
 }
 .laterbuses .time {
-  height: 61px;
-  width: 62.5px;
+  height: 36px;
+  width: 37.5px;
   text-align: center;
-  line-height: 62.5px;
+  line-height: 37.5px;
   margin: 0;
-  font-size: 20px;
+  font-size: 16px;
 }
 .laterbuses .time:first-child {
   border-bottom: 3px solid #2f363c;
@@ -147,6 +154,16 @@ h3 {
 .bart .laterbuses .time {
   height: 49px;
   line-height: 50px;
+}
+.muniContainer .col1,
+.muniContainer .col2 {
+  float: left;
+  width: 49%;
+}
+
+#muni-north,
+#muni-south {
+  overflow: hidden;
 }
 #muni12_4669 .busnumber,
 #muni12_4668 .busnumber {
@@ -302,4 +319,82 @@ word-spacing:inherit !important;
 .slabtextdone .slabtext
 {
 display:block;
+}
+
+#twitter {
+	overflow: hidden;
+	position: relative;
+	height: 100%;
+  min-height: 20px;
+  box-sizing: border-box;
+}
+#twitter .scroll-wrap {
+	position: absolute;
+}
+.tweet {
+	position: relative;
+	clear: both;
+	background-repeat: no-repeat;
+	background-size: 100%;
+	overflow: hidden;
+	min-height: 98px;
+	width: 100%;
+	background-color: rgba(0, 0, 0, 0.7);
+}
+
+.tweet.background .userInfo {
+	position: absolute;
+	background: rgba(0, 0, 0, 0.7);
+	bottom: 0;
+	right: 0;
+	width: 100%;
+	min-height: 90px;
+	color: rgb(221, 221, 221);
+}
+
+.tweet .tweetQR {
+	display: none;
+}
+
+.tweet .tweetMedia {
+	width: 100%;
+}
+
+.userInfo {
+	overflow: hidden;
+}
+
+.userInfo a{
+	color: white;
+	text-decoration: none;
+}
+
+.userInfo img.userImage {
+	float: left;
+	padding: 10px;
+	width: 80px;
+}
+
+.userInfo .userName {
+	box-sizing: border-box;
+	position: absolute;
+	bottom: 10px;
+	width: 80px;
+	font-size: 12px;
+	left: 10px;
+	padding: 2px;
+	overflow: hidden;
+	background: rgba(0, 0, 0, 0.5);
+	color: rgb(221, 221, 221);
+}
+
+.userInfo .caption {
+	padding: 10px;
+	font-size: 14px;
+}
+
+.userInfo cite {
+	position: absolute;
+	bottom: 5px;
+	right: 10px;
 }

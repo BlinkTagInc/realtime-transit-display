@@ -1,4 +1,6 @@
 var bartAPIKey = 'MW9S-E7SL-26DU-VV8V';
+var since_id = 0;
+var isPi = (navigator.userAgent.indexOf("armv6") != -1 || navigator.userAgent.indexOf("Midori") != -1);
 
 jQuery.fn.orderBy = function(keySelector) {
   return this.sort(function(a,b) {
@@ -11,6 +13,48 @@ jQuery.fn.orderBy = function(keySelector) {
     return 0;
   });
 };
+
+
+var linkify = (function () {
+  var replaceSubstr = function (text, i, j, substr) {
+    return text.substr(0, i) + substr + text.substr(j);
+  }
+
+  var mergeByIndices = function (a, b) {
+    var i = 0,
+      j = 0,
+      result = [];
+    while (i < a.length || j < b.length) {
+      if (i < a.length && (j >= b.length || a[i].indices[0] < b[j].indices[0]))
+        result.push(a[i++]);
+      else
+        result.push(b[j++]);
+    }
+    return result;
+  }
+
+  var linkEntity = function (entity) {
+    if (entity.name) // user mention
+      return "<a href=\"http://twitter.com/" + entity.screen_name + "\" class=\"user-mention\">@" + entity.screen_name + "</a>";
+    else if (entity.url) // url
+      return "<a href=\"" + entity.url + "\" class=\"url\">" + entity.display_url + "</a>";
+    else // hashtag
+      return "<a href=\"http://twitter.com/search/%23" + entity.text + "\" class=\"hashtag\">#" + entity.text + "</a>";
+  }
+
+  var linkify = function (post) {
+    var text = post.text,
+      offset = 0;
+    var entities = mergeByIndices(mergeByIndices(post.entities.hashtags, post.entities.urls), post.entities.user_mentions);
+    entities.forEach(function (entity) {
+      var new_substr = linkEntity(entity);
+      text = replaceSubstr(text, entity.indices[0] + offset, entity.indices[1] + offset, new_substr);
+      offset += new_substr.length - (entity.indices[1] - entity.indices[0]);
+    });
+    return text;
+  }
+  return linkify;
+})();
 
 
 function updateWeather() {
@@ -198,7 +242,7 @@ function updateMUNI(){
       route: 14,
       stop:5551,
       direction: 'north',
-      destination: 'Mission to Transbay & Ferry Building'
+      destination: 'Mission to Ferry Building'
     },
     {
       route: 14,
@@ -228,7 +272,7 @@ function updateMUNI(){
       route: 22,
       stop:3299,
       direction: 'east',
-      destination: '16th St to Potrero Hill & Dogpatch'
+      destination: '16th St to Dogpatch'
     },
     {
       route: 33,
@@ -303,9 +347,11 @@ function updateMUNI(){
         div.toggle((predictions.length > 0));
 
         if(callbackCount == MUNIroutes.length) {
-          $('.muniContainer').each(function(idx, muniContainer){
-            $('.muni', muniContainer).orderBy(function() {return +$('.nextbus', this).text();}).appendTo(muniContainer);
-          });
+          // $('.muniContainer').each(function(idx, muniContainer){
+          //   $('.muni', muniContainer).orderBy(function() {
+          //     return +$('.nextbus', this).text();
+          //   }).appendTo(muniContainer);
+          // });
         }
       }
     });
@@ -384,6 +430,90 @@ function updateClock() {
 }
 
 
+function updateTwitter() {
+  try {
+    $.getJSON('/api/twitter', {
+      since_id: since_id
+    }, function (data) {
+      data.forEach(function (tweet) {
+        //Update 'since_id' if larger
+        since_id = (tweet.id > since_id) ? tweet.id : since_id;
+
+        //ignore @replies and blank tweets
+        if (tweet.text == undefined || (tweet.in_reply_to_user_id && tweet.in_reply_to_screen_name != 'pwndepot') || (tweet.text[0] == '@' && tweet.text.substring(0, 9) != '@pwndepot')) {
+          return;
+        }
+        // Build the html string for the current tweet
+        var statusUrl = 'http://www.twitter.com/' + tweet.from_user + '/status/' + tweet.id;
+        $('<div>')
+          .addClass('tweet')
+          .attr('id', tweet.id)
+          .append($('<div>')
+            .addClass('userInfo')
+            .append($('<img>')
+              .attr('src', tweet.user.profile_image_url.replace('_normal', '_bigger'))
+              .addClass('userImage'))
+            .append($('<div>')
+              .addClass('userName')
+              .text(tweet.user.name))
+            .append($('<div>')
+              .addClass('caption')
+              .html(linkify(tweet)))
+            .append($('<cite>')
+              .addClass('timeago')
+              .attr('title', tweet.created_at)))
+          .appendTo('#twitter .scroll-wrap')
+
+        if (tweet.entities.media) {
+          //grab first image
+          var height = $('#twitter').width() / tweet.entities.media[0].sizes.medium.w * tweet.entities.media[0].sizes.medium.h;
+          $('#' + tweet.id)
+            .css('background-image', 'url(' + tweet.entities.media[0].media_url + ')')
+            .height(height)
+            .addClass('background');
+        } else if (tweet.entities.urls && tweet.entities.urls.length) {
+          //use embed.ly to get image from first URL
+          var embedlyOptions = {
+            key: '991322aef9ba4e68b66546387e0b216d',
+            url: tweet.entities.urls[0].expanded_url,
+            maxwidth: 600
+          }
+          $.getJSON('http://api.embed.ly/1/oembed?callback=?', embedlyOptions, function (data) {
+            if (data.thumbnail_url) {
+              var height = $('#twitter').width() / data.thumbnail_width * data.thumbnail_height;
+              $('#' + tweet.id)
+                .css('background-image', 'url(' + data.thumbnail_url + ')')
+                .height(height)
+                .addClass('background');
+            }
+          });
+        }
+      });
+      $('#twitter .timeago').timeago();
+    });
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+
+function scrollTwitter() {
+  var first = $('#twitter .tweet:first-child');
+  if (isPi) {
+    $('#twitter .scroll-wrap').append(first);
+  } else {
+    $('#twitter .scroll-wrap').animate({
+      top: -$(first).height()
+    }, 800, function () {
+      $('#twitter .scroll-wrap')
+        .append(first)
+        .css('top', 0);
+    });
+  }
+}
+
+
+
 function resizeWindow() {
   var newWindowHeight = $(window).height() - $('#tweetContainer').outerHeight() - $('#pageTitle').outerHeight();
   $("#transitContainer").height(newWindowHeight);
@@ -437,6 +567,16 @@ $(document).ready(function(){
   //Get weather every hour
   updateWeather();
   setInterval(updateWeather, 3600000);
+
+  //update Twitter every 5 minutes
+  updateTwitter();
+  setInterval(updateTwitter, 300000);
+
+  //scroll every 5 seconds
+  setInterval(function () {
+    scrollTwitter()
+  }, 5000);
+
 
   //Resize transit if needed
   resizeDepartures();

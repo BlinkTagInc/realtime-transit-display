@@ -21,16 +21,25 @@ block content
       #bart-north.bartContainer
       h2 BART Southbound
       #bart-south.bartContainer
-    #muni1.grid-three
-      h2 MUNI Northbound
-      #muni-north.muniContainer
-      h2 MUNI Westbound
-      #muni-west.muniContainer
-    #muni2.grid-three
-      h2 MUNI Southbound
-      #muni-south.muniContainer
-      h2 MUNI Eastbound
-      #muni-east.muniContainer
+    .grid-three
+      .muniContainer
+        .col1
+          h2.clear MUNI Northbound
+          #muni-north
+          h2.clear MUNI Westbound
+          #muni-west
+        .col2
+          h2.clear MUNI Southbound
+          #muni-south
+          h2.clear MUNI Eastbound
+          #muni-east
+    .grid-three
+      h2 Tweets
+      #twitter
+        .scroll-wrap
+      
 
-  script(src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js")
+  script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js")
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.5.3/jquery.timeago.min.js")
+
   script(src="javascripts/main.js")
