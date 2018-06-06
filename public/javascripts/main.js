@@ -99,6 +99,10 @@ function updateBARTDepartures(){
         departure.color = $(data).find('color').text();
         departure.times.push(minutes);
         departure.direction = $(data).find('direction').text();
+
+        if (departure.hexcolor === '#ffffff') {
+          departure.hexcolor = '#bbbbbb';
+        }
       }
     });
 
