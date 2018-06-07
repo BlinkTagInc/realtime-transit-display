@@ -67,12 +67,15 @@ function updateWeather() {
 
     //Forecast
     var forecast = data[1].forecast.simpleforecast.forecastday[0];
-    $('#weather .forecast').html(
+    $('#weather .forecast1').html(
       '<img src="http://icons-ak.wxug.com/i/c/a/' + forecast.icon + '.gif" class="weathericon">' +
       forecast.conditions +
-      '<br>High: <span style="color:' + colorTemp(forecast.high.fahrenheit) + ';">' + forecast.high.fahrenheit + '&deg;F</span>' +
-      '<br>Low: <span style="color:' + colorTemp(forecast.low.fahrenheit) + ';">' + forecast.low.fahrenheit + '&deg;F' + '</span>' +
       '<br>Precip: ' + forecast.pop + '%'
+    );
+
+    $('#weather .forecast2').html(
+      'High: <span style="color:' + colorTemp(forecast.high.fahrenheit) + ';">' + forecast.high.fahrenheit + '&deg;F</span>' +
+      '<br>Low: <span style="color:' + colorTemp(forecast.low.fahrenheit) + ';">' + forecast.low.fahrenheit + '&deg;F' + '</span>'
     );
   });
 
@@ -132,6 +135,10 @@ function updateBARTDepartures(){
 
     if(departure.destination == 'Dublin/Pleasanton') {
       departure.destination = 'Dublin/ Pleasanton';
+    }
+
+    if(departure.destination == 'SFO/Millbrae') {
+      departure.destination = 'SFO/ Millbrae';
     }
 
     $(data).find('estimate').each(function(j, data){
@@ -194,7 +201,7 @@ function updateBARTAdvisories(){
     },
     dataType: 'xml',
     success:function(result){
-      $('#bart .advisories').empty();
+      $('.bart-advisories').empty();
       $(result).find('bsa').each(function(i, data){
         //Process advisories
         var description = $(data).find('description').text();
@@ -202,7 +209,7 @@ function updateBARTAdvisories(){
           $('<div>')
             .addClass('advisory')
             .text(description)
-            .appendTo('#bart .advisories');
+            .appendTo('.bart-advisories');
         }
       });
     }

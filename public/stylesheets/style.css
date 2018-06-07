@@ -45,15 +45,20 @@ header {
 }
 h2 {
   text-transform: uppercase;
-  margin: 20px 0 0 30px;
+  margin: 20px 0 0 0;
   background: rgba(0, 0, 0, 0.1);
-  padding: 0 4px;
+  padding: 0 10px 0 30px;
   box-sizing: border-box;
   letter-spacing: 1px;
 }
 h3 {
   text-transform: uppercase;
 }
+.col {
+  float: left;
+  width: 50%;
+}
+
 .muniContainer,
 .bartContainer,
 .uberContainer {
@@ -119,7 +124,7 @@ h3 {
 .laterbuses .time:first-child {
   border-bottom: 3px solid #2f363c;
 }
-#bart .advisories .advisory {
+.bart-advisories .advisory {
   font-size: 24px;
   font-weight: bold;
   background-color: #b94a48;
@@ -138,15 +143,19 @@ h3 {
 .bart .destination {
   float: left;
   height: 100px;
-  width: 166px;
+  width: 120px;
   box-sizing: border-box;
   padding: 20px 4px 0;
   overflow:hidden;
-  font-size: 24px;
+  font-size: 22px;
   text-align: center;
   position: relative;
 }
-.bart .nextbus,
+.bart .nextbus {
+  height: 100px;
+  line-height: 100px;
+  width: 90px;
+}
 .bart .laterbuses {
   height: 100px;
   line-height: 100px;
@@ -154,11 +163,6 @@ h3 {
 .bart .laterbuses .time {
   height: 49px;
   line-height: 50px;
-}
-.muniContainer .col1,
-.muniContainer .col2 {
-  float: left;
-  width: 49%;
 }
 
 #muni-north,
@@ -186,12 +190,6 @@ h3 {
 #muni33_3299 .busnumber,
 #muni33_7289 .busnumber {
   background: #b4304f;
-}
-
-#uber .col1,
-#uber .col2 {
-  float: left;
-  width: 49%;
 }
 
 .uber {
@@ -229,15 +227,12 @@ h3 {
   height: 40px;
 }
 
-
-
 #time {
-  margin-left: 30px;
   background: rgba(0,0,0,0.1);
-  width: 381px;
+  width: 30%;
   height: 80px;
   overflow: hidden;
-  padding-left: 10px;
+  padding-left: 40px;
   box-sizing: border-box;
 }
 #clock {
@@ -255,13 +250,11 @@ h3 {
 }
 
 #weatherContainer {
-  width: 33.3%;
+  width: 30%;
   float: right;
 }
 #weather {
-  width: 381px;
-  padding: 7px 0 0 30px;
-  margin-left: 30px;
+  padding: 7px 30px 0 30px;
   background: rgba(0,0,0,0.1);
   height:80px;
   box-sizing: border-box;
@@ -270,14 +263,24 @@ h3 {
   font-size: 48px;
   float: left;
 }
-#weather .forecast {
+#weather .forecast1 {
   display: inline-block;
-  font-size: 12px;
-  width: 175px;
+  font-size: 16px;
+  width: 205px;
+  vertical-align: top;
+  margin-top: 8px;
 }
-#weather .forecast img {
+
+#weather .forecast2 {
+  display: inline-block;
+  font-size: 16px;
+  width: 75px;
+  vertical-align: top;
+  margin-top: 8px;
+}
+#weather .forecast1 img {
   float: left;
-  margin: 8px 12px 0 8px;
+  margin: 0 12px 0 8px;
   width: 50px;
 }
 .rotate {

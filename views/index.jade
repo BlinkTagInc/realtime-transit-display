@@ -7,28 +7,32 @@ block content
       #weatherContainer
         #weather
           .temp
-          .forecast
+          .forecast1
+          .forecast2
       #time
         #clock
         #date.slabtext
-    #bart.grid-three
+    .grid-three
       h2 Uber
       #uber.uberContainer
-        .col1
-        .col2
-      .advisories
-      h2 BART Northbound
-      #bart-north.bartContainer
-      h2 BART Southbound
-      #bart-south.bartContainer
+        .col
+        .col
+      .bartContainer
+        .bart-advisories
+        .col
+          h2 BART Northbound
+          #bart-north
+        .col
+          h2 BART Southbound
+          #bart-south
     .grid-three
       .muniContainer
-        .col1
+        .col
           h2.clear MUNI Northbound
           #muni-north
           h2.clear MUNI Westbound
           #muni-west
-        .col2
+        .col
           h2.clear MUNI Southbound
           #muni-south
           h2.clear MUNI Eastbound
