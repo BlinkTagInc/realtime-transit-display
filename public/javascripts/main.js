@@ -224,7 +224,7 @@ function updateMUNI(){
       route: 12,
       stop:4668,
       direction: 'north',
-      destination: 'Folsom to Downtown and North Beach'
+      destination: 'Folsom to Downtown & N. Beach'
     },
     {
       route: 12,

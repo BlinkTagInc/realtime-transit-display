@@ -143,18 +143,18 @@ h3 {
 .bart .destination {
   float: left;
   height: 100px;
-  width: 120px;
+  width: 100px;
   box-sizing: border-box;
   padding: 20px 4px 0;
   overflow:hidden;
-  font-size: 22px;
+  font-size: 18px;
   text-align: center;
   position: relative;
 }
 .bart .nextbus {
   height: 100px;
   line-height: 100px;
-  width: 90px;
+  width: 80px;
 }
 .bart .laterbuses {
   height: 100px;
