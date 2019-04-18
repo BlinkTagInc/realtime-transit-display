@@ -28,7 +28,8 @@ router.get('/', function(req, res){
           include_entities: true,
           result_type: 'recent',
           since_id: req.query.since_id || 0,
-          q: usernames.slice(userCount, (userCount + userIncrement)).join(' OR ')
+          q: usernames.slice(userCount, (userCount + userIncrement)).join(' OR '),
+          tweet_mode: 'extended',
         },
         headers: {
           Authorization: `Bearer ${nconf.get('TWITTER_TOKEN')}`
