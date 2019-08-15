@@ -7,10 +7,10 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
-    "async": "2.6.1",
-    "cookie-parser": "1.4.3",
+    "async": "3.1.0",
+    "cookie-parser": "1.4.4",
     "debug": "4.1.1",
-    "express": "4.16.4",
+    "express": "4.17.1",
     "jade": "1.11.0",
     "morgan": "1.9.1",
     "nconf": "0.10.0",
@@ -19,7 +19,7 @@
     "underscore": "1.9.1"
   },
   "engines": {
-    "node": "10.15.2"
+    "node": "10.16.3"
   },
   "license": "MIT"
 }
