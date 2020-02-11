@@ -19,7 +19,7 @@
     "underscore": "1.9.1"
   },
   "engines": {
-    "node": "10.16.3"
+    "node": "12.15.0"
   },
   "license": "MIT"
 }
