@@ -1,7 +1,7 @@
 {
   "name": "realtime-transit-display",
   "author": "Brendan Nee <me@bn.ee>",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "repository": "https://github.com/brendannee/Realtime-Transit-Display.git",
   "scripts": {
     "start": "node ./bin/www"
@@ -9,14 +9,14 @@
   "dependencies": {
     "async": "3.2.0",
     "cookie-parser": "1.4.5",
-    "debug": "4.1.1",
+    "debug": "4.3.1",
     "express": "4.17.1",
     "jade": "1.11.0",
     "morgan": "1.10.0",
-    "nconf": "0.10.0",
+    "nconf": "0.11.0",
     "request": "2.88.2",
     "serve-favicon": "2.5.0",
-    "underscore": "1.10.2"
+    "underscore": "1.12.0"
   },
   "engines": {
     "node": "12.18.0"
